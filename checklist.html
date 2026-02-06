@@ -12,416 +12,333 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
-            max-width: 700px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-bottom: 30px;
-            color: #555;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
-
-        .back-link:hover {
-            color: #2c3e50;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 30px 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         h1 {
-            font-size: 2rem;
-            color: #2c3e50;
-            margin-bottom: 8px;
-            font-weight: 600;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        .subtitle {
-            color: #666;
-            font-size: 1rem;
-        }
-
-        .add-section {
+        .controls {
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 10px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .input-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        #disciplina-input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 1rem;
-        }
-
-        #disciplina-input:focus {
-            outline: none;
-            border-color: #888;
-        }
-
-        .btn-add {
-            padding: 12px 24px;
-            background: #2c3e50;
+        .btn {
+            background: #667eea;
             color: white;
             border: none;
+            padding: 12px 24px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
         }
 
-        .btn-add:hover {
-            background: #34495e;
-        }
-
-        .filters {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            flex: 1;
-            min-width: 120px;
-            padding: 10px 16px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        .filter-btn:hover {
-            border-color: #888;
-        }
-
-        .filter-btn.active {
-            background: #2c3e50;
-            color: white;
-            border-color: #2c3e50;
-        }
-
-        .count {
-            background: rgba(0,0,0,0.1);
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            margin-left: 6px;
-        }
-
-        .filter-btn.active .count {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .disciplinas-list {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            padding: 20px;
-            margin-bottom: 20px;
-            min-height: 200px;
-        }
-
-        .disciplina-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .disciplina-item:last-child {
-            border-bottom: none;
-        }
-
-        .disciplina-item.completed .disciplina-text {
-            text-decoration: line-through;
-            color: #999;
-        }
-
-        .checkbox {
-            width: 20px;
-            height: 20px;
-            min-width: 20px;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .disciplina-item.completed .checkbox {
-            background: #2c3e50;
-            border-color: #2c3e50;
-            color: white;
-        }
-
-        .disciplina-text {
-            flex: 1;
-            color: #333;
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         .btn-delete {
-            background: none;
-            border: none;
-            color: #999;
-            cursor: pointer;
-            padding: 4px 8px;
-            font-size: 1.1rem;
+            background: #ef4444;
+            margin-left: 10px;
         }
 
         .btn-delete:hover {
-            color: #e74c3c;
+            background: #dc2626;
         }
 
-        .empty-state {
-            display: none;
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
+        .disciplinas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
         }
 
-        .empty-state.show {
-            display: block;
+        .disciplina-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
         }
 
-        .empty-state p {
-            font-size: 1.1rem;
+        .disciplina-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .card-header input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            font-size: 16px;
             margin-bottom: 8px;
         }
 
-        .empty-state small {
-            font-size: 0.9rem;
+        .card-header input[type="text"]:first-child {
+            font-weight: 600;
+            font-size: 18px;
         }
 
-        .bulk-actions {
-            text-align: center;
-        }
-
-        .btn-clear {
-            padding: 10px 20px;
-            background: #e74c3c;
-            color: white;
-            border: none;
+        .checklist-item {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f9fafb;
             border-radius: 6px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checklist-item label {
+            display: flex;
+            align-items: center;
             cursor: pointer;
-            font-size: 0.9rem;
-            display: none;
+            flex: 1;
         }
 
-        .btn-clear.show {
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .checklist-item input[type="text"],
+        .checklist-item input[type="datetime-local"] {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+
+        .item-label {
+            font-weight: 500;
+            color: #374151;
+            min-width: 120px;
+        }
+
+        .delete-card {
+            width: 100%;
+            margin-top: 15px;
+            padding: 8px;
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .delete-card:hover {
+            background: #fecaca;
+        }
+
+        .status-badge {
             display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
         }
 
-        .btn-clear:hover {
-            background: #c0392b;
+        .status-sim {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-nao {
+            background: #fee2e2;
+            color: #991b1b;
         }
 
         @media (max-width: 768px) {
-            .input-group {
-                flex-direction: column;
+            .disciplinas-grid {
+                grid-template-columns: 1fr;
             }
-
-            .filters {
-                flex-direction: column;
-            }
-
-            .filter-btn {
-                width: 100%;
+            
+            h1 {
+                font-size: 1.8em;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-link">← Voltar</a>
+        <h1>📚 Checklist de Disciplinas</h1>
         
-        <header>
-            <h1>Checklist de Disciplinas</h1>
-            <p class="subtitle">Organize suas disciplinas e acompanhe seu progresso</p>
-        </header>
-
-        <div class="add-section">
-            <div class="input-group">
-                <input type="text" id="disciplina-input" placeholder="Nome da disciplina...">
-                <button id="add-btn" class="btn-add">Adicionar</button>
-            </div>
+        <div class="controls">
+            <button class="btn" onclick="adicionarDisciplina()">+ Nova Disciplina</button>
+            <button class="btn btn-delete" onclick="limparTudo()">🗑️ Limpar Tudo</button>
         </div>
 
-        <div class="filters">
-            <button class="filter-btn active" data-filter="all">
-                Todas <span class="count" id="count-all">0</span>
-            </button>
-            <button class="filter-btn" data-filter="active">
-                Em Andamento <span class="count" id="count-active">0</span>
-            </button>
-            <button class="filter-btn" data-filter="completed">
-                Concluídas <span class="count" id="count-completed">0</span>
-            </button>
-        </div>
-
-        <div class="disciplinas-list" id="disciplinas-list"></div>
-
-        <div class="empty-state" id="empty-state">
-            <p>Nenhuma disciplina adicionada ainda</p>
-            <small>Comece adicionando uma disciplina acima</small>
-        </div>
-
-        <div class="bulk-actions">
-            <button class="btn-clear" id="clear-completed">Limpar Concluídas</button>
-        </div>
+        <div class="disciplinas-grid" id="disciplinasGrid"></div>
     </div>
 
     <script>
+        // Carregar dados salvos ao iniciar
         let disciplinas = JSON.parse(localStorage.getItem('disciplinas')) || [];
-        let filtroAtual = 'all';
 
-        const disciplinaInput = document.getElementById('disciplina-input');
-        const addBtn = document.getElementById('add-btn');
-        const disciplinasList = document.getElementById('disciplinas-list');
-        const emptyState = document.getElementById('empty-state');
-        const clearCompletedBtn = document.getElementById('clear-completed');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderDisciplinas();
-            updateCounts();
-        });
-
-        addBtn.addEventListener('click', addDisciplina);
-        disciplinaInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addDisciplina();
-        });
-
-        function addDisciplina() {
-            const texto = disciplinaInput.value.trim();
-            if (texto === '') return;
-
-            const novaDisciplina = {
-                id: Date.now(),
-                texto: texto,
-                concluida: false
-            };
-
-            disciplinas.unshift(novaDisciplina);
-            saveDisciplinas();
-            disciplinaInput.value = '';
-            renderDisciplinas();
-            updateCounts();
+        function salvarDados() {
+            localStorage.setItem('disciplinas', JSON.stringify(disciplinas));
         }
 
-        function renderDisciplinas() {
-            const disciplinasFiltradas = filtrarDisciplinas();
+        function adicionarDisciplina() {
+            const novaDisciplina = {
+                id: Date.now(),
+                nome: '',
+                professor: '',
+                videoBoasVindas: false,
+                planoEnsino: false,
+                aulaAoVivo1: '',
+                aulaAoVivo2: '',
+                plantaoSemanal: ''
+            };
             
-            if (disciplinasFiltradas.length === 0) {
-                emptyState.classList.add('show');
-                disciplinasList.innerHTML = '';
+            disciplinas.push(novaDisciplina);
+            salvarDados();
+            renderizar();
+        }
+
+        function deletarDisciplina(id) {
+            if (confirm('Tem certeza que deseja deletar esta disciplina?')) {
+                disciplinas = disciplinas.filter(d => d.id !== id);
+                salvarDados();
+                renderizar();
+            }
+        }
+
+        function atualizarCampo(id, campo, valor) {
+            const disciplina = disciplinas.find(d => d.id === id);
+            if (disciplina) {
+                disciplina[campo] = valor;
+                salvarDados();
+                renderizar();
+            }
+        }
+
+        function limparTudo() {
+            if (confirm('Tem certeza que deseja limpar TODAS as disciplinas? Esta ação não pode ser desfeita.')) {
+                disciplinas = [];
+                salvarDados();
+                renderizar();
+            }
+        }
+
+        function renderizar() {
+            const grid = document.getElementById('disciplinasGrid');
+            
+            if (disciplinas.length === 0) {
+                grid.innerHTML = '<p style="color: white; text-align: center; grid-column: 1/-1;">Nenhuma disciplina cadastrada. Clique em "Nova Disciplina" para começar.</p>';
                 return;
             }
 
-            emptyState.classList.remove('show');
-            
-            disciplinasList.innerHTML = disciplinasFiltradas.map(disciplina => `
-                <div class="disciplina-item ${disciplina.concluida ? 'completed' : ''}" data-id="${disciplina.id}">
-                    <div class="checkbox" onclick="toggleDisciplina(${disciplina.id})">
-                        ${disciplina.concluida ? '✓' : ''}
+            grid.innerHTML = disciplinas.map(disc => `
+                <div class="disciplina-card">
+                    <div class="card-header">
+                        <input 
+                            type="text" 
+                            placeholder="Nome da Disciplina" 
+                            value="${disc.nome}"
+                            onchange="atualizarCampo(${disc.id}, 'nome', this.value)"
+                        />
+                        <input 
+                            type="text" 
+                            placeholder="Professor(a)" 
+                            value="${disc.professor}"
+                            onchange="atualizarCampo(${disc.id}, 'professor', this.value)"
+                        />
                     </div>
-                    <span class="disciplina-text">${disciplina.texto}</span>
-                    <button class="btn-delete" onclick="deleteDisciplina(${disciplina.id})">✕</button>
+
+                    <div class="checklist-item">
+                        <label>
+                            <input 
+                                type="checkbox" 
+                                ${disc.videoBoasVindas ? 'checked' : ''}
+                                onchange="atualizarCampo(${disc.id}, 'videoBoasVindas', this.checked)"
+                            />
+                            <span class="item-label">Vídeo de boas-vindas</span>
+                        </label>
+                        <span class="status-badge ${disc.videoBoasVindas ? 'status-sim' : 'status-nao'}">
+                            ${disc.videoBoasVindas ? 'Postou' : 'Não postou'}
+                        </span>
+                    </div>
+
+                    <div class="checklist-item">
+                        <label>
+                            <input 
+                                type="checkbox" 
+                                ${disc.planoEnsino ? 'checked' : ''}
+                                onchange="atualizarCampo(${disc.id}, 'planoEnsino', this.checked)"
+                            />
+                            <span class="item-label">Plano de ensino</span>
+                        </label>
+                        <span class="status-badge ${disc.planoEnsino ? 'status-sim' : 'status-nao'}">
+                            ${disc.planoEnsino ? 'Postou' : 'Não postou'}
+                        </span>
+                    </div>
+
+                    <div class="checklist-item">
+                        <span class="item-label">Aula ao vivo 1:</span>
+                        <input 
+                            type="datetime-local" 
+                            value="${disc.aulaAoVivo1}"
+                            onchange="atualizarCampo(${disc.id}, 'aulaAoVivo1', this.value)"
+                        />
+                    </div>
+
+                    <div class="checklist-item">
+                        <span class="item-label">Aula ao vivo 2:</span>
+                        <input 
+                            type="datetime-local" 
+                            value="${disc.aulaAoVivo2}"
+                            onchange="atualizarCampo(${disc.id}, 'aulaAoVivo2', this.value)"
+                        />
+                    </div>
+
+                    <div class="checklist-item">
+                        <span class="item-label">Plantão semanal:</span>
+                        <input 
+                            type="text" 
+                            placeholder="Ex: Segunda às 14h"
+                            value="${disc.plantaoSemanal}"
+                            onchange="atualizarCampo(${disc.id}, 'plantaoSemanal', this.value)"
+                        />
+                    </div>
+
+                    <button class="btn delete-card" onclick="deletarDisciplina(${disc.id})">
+                        🗑️ Deletar Disciplina
+                    </button>
                 </div>
             `).join('');
         }
 
-        function filtrarDisciplinas() {
-            switch(filtroAtual) {
-                case 'active': return disciplinas.filter(d => !d.concluida);
-                case 'completed': return disciplinas.filter(d => d.concluida);
-                default: return disciplinas;
-            }
-        }
-
-        function toggleDisciplina(id) {
-            disciplinas = disciplinas.map(disciplina => 
-                disciplina.id === id ? { ...disciplina, concluida: !disciplina.concluida } : disciplina
-            );
-            saveDisciplinas();
-            renderDisciplinas();
-            updateCounts();
-        }
-
-        function deleteDisciplina(id) {
-            if (confirm('Tem certeza que deseja excluir esta disciplina?')) {
-                disciplinas = disciplinas.filter(disciplina => disciplina.id !== id);
-                saveDisciplinas();
-                renderDisciplinas();
-                updateCounts();
-            }
-        }
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                filtroAtual = btn.dataset.filter;
-                renderDisciplinas();
-            });
-        });
-
-        clearCompletedBtn.addEventListener('click', () => {
-            if (confirm('Deseja remover todas as disciplinas concluídas?')) {
-                disciplinas = disciplinas.filter(d => !d.concluida);
-                saveDisciplinas();
-                renderDisciplinas();
-                updateCounts();
-            }
-        });
-
-        function updateCounts() {
-            const total = disciplinas.length;
-            const ativas = disciplinas.filter(d => !d.concluida).length;
-            const concluidas = disciplinas.filter(d => d.concluida).length;
-
-            document.getElementById('count-all').textContent = total;
-            document.getElementById('count-active').textContent = ativas;
-            document.getElementById('count-completed').textContent = concluidas;
-
-            if (concluidas > 0) {
-                clearCompletedBtn.classList.add('show');
-            } else {
-                clearCompletedBtn.classList.remove('show');
-            }
-        }
-
-        function saveDisciplinas() {
-            localStorage.setItem('disciplinas', JSON.stringify(disciplinas));
-        }
+        // Renderizar ao carregar a página
+        renderizar();
     </script>
 </body>
 </html>
