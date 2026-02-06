@@ -4,28 +4,231 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Experimentos de Código</title>
-    <link rel="stylesheet" href="css/experimentos.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .back-link:hover {
+            color: #2c3e50;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .demo {
+            background: #fafafa;
+            padding: 24px;
+            border-radius: 6px;
+        }
+
+        /* Calculadora */
+        .calculator {
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        #calc-display {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.3rem;
+            text-align: right;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            background: white;
+        }
+
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .calc-buttons button {
+            padding: 16px;
+            font-size: 1.1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .calc-buttons button:hover {
+            background: #f5f5f5;
+        }
+
+        .calc-buttons button.operator {
+            background: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        .calc-buttons button.clear {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        .calc-buttons button.equals {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        /* Contador */
+        .counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 16px;
+        }
+
+        .counter-display {
+            font-size: 3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .counter-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #2c3e50;
+            background: white;
+            color: #2c3e50;
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .counter-btn:hover {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .reset-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 24px;
+            background: #555;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .reset-btn:hover {
+            background: #666;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .counter-display {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
+        <a href="index.html" class="back-link">← Voltar</a>
+        
         <header>
-            <a href="index.html" class="back-button">
-                <i class="fas fa-arrow-left"></i> Voltar
-            </a>
-            <h1><i class="fas fa-flask"></i> Experimentos de Código</h1>
-            <p class="subtitle">Testes, práticas e pequenos projetos</p>
+            <h1>Experimentos de Código</h1>
+            <p class="subtitle">Testes e pequenos projetos</p>
         </header>
 
-        <main class="experiments-grid">
-            <!-- Experimento 1 - Exemplo de calculadora -->
-            <div class="experiment-card">
-                <div class="experiment-header">
-                    <h3>Calculadora Simples</h3>
-                    <span class="tag">JavaScript</span>
-                </div>
-                <p>Uma calculadora básica com as quatro operações fundamentais</p>
-                <div class="experiment-demo">
+        <div class="grid">
+            <!-- Calculadora -->
+            <div class="card">
+                <h2>Calculadora</h2>
+                <span class="tag">JavaScript</span>
+                <p>Calculadora básica com operações fundamentais</p>
+                <div class="demo">
                     <div class="calculator">
                         <input type="text" id="calc-display" readonly placeholder="0">
                         <div class="calc-buttons">
@@ -53,57 +256,72 @@
                 </div>
             </div>
 
-            <!-- Experimento 2 - Contador -->
-            <div class="experiment-card">
-                <div class="experiment-header">
-                    <h3>Contador</h3>
-                    <span class="tag">JavaScript</span>
-                </div>
+            <!-- Contador -->
+            <div class="card">
+                <h2>Contador</h2>
+                <span class="tag">JavaScript</span>
                 <p>Contador simples com incremento e decremento</p>
-                <div class="experiment-demo">
+                <div class="demo">
                     <div class="counter">
-                        <button onclick="decrementar()" class="counter-btn">
-                            <i class="fas fa-minus"></i>
-                        </button>
+                        <button onclick="decrementar()" class="counter-btn">-</button>
                         <span id="counter-display" class="counter-display">0</span>
-                        <button onclick="incrementar()" class="counter-btn">
-                            <i class="fas fa-plus"></i>
-                        </button>
+                        <button onclick="incrementar()" class="counter-btn">+</button>
                     </div>
                     <button onclick="resetarContador()" class="reset-btn">Resetar</button>
                 </div>
             </div>
-
-            <!-- Experimento 3 - Placeholder para novos testes -->
-            <div class="experiment-card placeholder">
-                <div class="experiment-header">
-                    <h3>Seu Próximo Experimento</h3>
-                    <span class="tag">Em breve</span>
-                </div>
-                <p>Adicione aqui seus testes e práticas de código</p>
-                <div class="experiment-demo">
-                    <div class="placeholder-content">
-                        <i class="fas fa-code"></i>
-                        <p>Espaço reservado para seus experimentos</p>
-                    </div>
-                </div>
-            </div>
-
-        </main>
-
-        <section class="instructions">
-            <h2><i class="fas fa-info-circle"></i> Como Adicionar Novos Experimentos</h2>
-            <div class="instructions-content">
-                <ol>
-                    <li>Abra o arquivo <code>experimentos.html</code></li>
-                    <li>Copie o bloco <code>&lt;div class="experiment-card"&gt;</code></li>
-                    <li>Cole e modifique com seu próprio código</li>
-                    <li>Adicione o JavaScript correspondente no final do arquivo ou em <code>experimentos.js</code></li>
-                </ol>
-            </div>
-        </section>
+        </div>
     </div>
 
-    <script src="js/experimentos.js"></script>
+    <script>
+        // CALCULADORA
+        let currentDisplay = '';
+
+        function appendToDisplay(value) {
+            const display = document.getElementById('calc-display');
+            currentDisplay += value;
+            display.value = currentDisplay;
+        }
+
+        function clearDisplay() {
+            const display = document.getElementById('calc-display');
+            currentDisplay = '';
+            display.value = '';
+        }
+
+        function calculate() {
+            const display = document.getElementById('calc-display');
+            try {
+                const result = eval(currentDisplay);
+                display.value = result;
+                currentDisplay = result.toString();
+            } catch (error) {
+                display.value = 'Erro';
+                currentDisplay = '';
+            }
+        }
+
+        // CONTADOR
+        let contador = 0;
+
+        function atualizarDisplay() {
+            document.getElementById('counter-display').textContent = contador;
+        }
+
+        function incrementar() {
+            contador++;
+            atualizarDisplay();
+        }
+
+        function decrementar() {
+            contador--;
+            atualizarDisplay();
+        }
+
+        function resetarContador() {
+            contador = 0;
+            atualizarDisplay();
+        }
+    </script>
 </body>
 </html>

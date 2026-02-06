@@ -3,78 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Espaço Digital</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Portfólio - Tutoria EAD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .back-link:hover {
+            color: #2c3e50;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        section {
+            background: white;
+            padding: 40px 30px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #2c3e50;
+            margin-bottom: 24px;
+            font-weight: 600;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .sobre-text {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .sobre-text p {
+            margin-bottom: 16px;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .experiencia {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .experiencia:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .experiencia h3 {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .periodo {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .experiencia p {
+            color: #555;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .experiencia ul {
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .experiencia li {
+            color: #555;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .destaques-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .destaque {
+            text-align: center;
+            padding: 24px;
+            background: #fafafa;
+            border-radius: 6px;
+        }
+
+        .destaque-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .destaque h4 {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .destaque p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .habilidades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .habilidade-categoria h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .habilidade-categoria ul {
+            list-style: none;
+        }
+
+        .habilidade-categoria li {
+            padding: 10px 0;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .habilidade-categoria li:last-child {
+            border-bottom: none;
+        }
+
+        .contato-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .contato-item {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contato-item:hover {
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header class="main-header">
-            <h1>Bem-vindo(a) ao Meu Espaço Digital</h1>
-            <p class="subtitle">Portfólio, projetos e experimentos</p>
+        <a href="index.html" class="back-link">← Voltar</a>
+        
+        <header>
+            <h1>Portfólio Profissional</h1>
+            <p class="subtitle">Tutoria de Educação a Distância</p>
         </header>
 
-        <main class="projects-grid">
-            <!-- Card Portfólio -->
-            <div class="project-card">
-                <div class="card-icon">
-                    <i class="fas fa-user-graduate"></i>
+        <section>
+            <h2>Sobre Mim</h2>
+            <div class="sobre-text">
+                <p>Olá! Sou uma profissional dedicada à educação a distância, com experiência em facilitar o aprendizado e proporcionar suporte educacional de qualidade em ambientes virtuais.</p>
+                <p>Minha missão é criar conexões significativas com os alunos, tornando o processo de aprendizagem mais acessível, engajador e eficaz através de metodologias inovadoras.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Experiências em Tutoria EAD</h2>
+            
+            <div class="experiencia">
+                <h3>Tutora Online - [Nome da Instituição]</h3>
+                <span class="periodo">[Mês/Ano - Atual]</span>
+                <p>Descrição das suas responsabilidades e realizações nesta posição.</p>
+                <ul>
+                    <li>Mediação de fóruns de discussão e atividades colaborativas online</li>
+                    <li>Acompanhamento individualizado do progresso dos alunos</li>
+                    <li>Elaboração de materiais didáticos complementares</li>
+                    <li>Realização de atendimentos síncronos via videoconferência</li>
+                    <li>Feedback personalizado em atividades e avaliações</li>
+                </ul>
+                <div class="tags">
+                    <span class="tag">Moodle</span>
+                    <span class="tag">Google Meet</span>
+                    <span class="tag">Zoom</span>
+                    <span class="tag">Google Classroom</span>
                 </div>
-                <h2>Portfólio Profissional</h2>
-                <p>Minhas experiências como tutora de educação a distância</p>
-                <a href="portfolio.html" class="card-link">
-                    Acessar <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <!-- Card Checklist de Disciplinas -->
-            <div class="project-card">
-                <div class="card-icon">
-                    <i class="fas fa-tasks"></i>
+            <div class="experiencia">
+                <h3>Tutora de Disciplina - [Nome da Instituição]</h3>
+                <span class="periodo">[Mês/Ano - Mês/Ano]</span>
+                <p>Descrição das suas responsabilidades e realizações nesta posição.</p>
+                <ul>
+                    <li>Suporte pedagógico em disciplinas específicas</li>
+                    <li>Esclarecimento de dúvidas através de diferentes canais</li>
+                    <li>Organização e moderação de webinários educacionais</li>
+                    <li>Análise de métricas de desempenho dos estudantes</li>
+                </ul>
+                <div class="tags">
+                    <span class="tag">Canvas LMS</span>
+                    <span class="tag">Microsoft Teams</span>
+                    <span class="tag">Padlet</span>
                 </div>
-                <h2>Checklist de Disciplinas</h2>
-                <p>Organizador de disciplinas e atividades acadêmicas</p>
-                <a href="checklist.html" class="card-link">
-                    Acessar <i class="fas fa-arrow-right"></i>
-                </a>
             </div>
 
-            <!-- Card para Projetos/Testes -->
-            <div class="project-card">
-                <div class="card-icon">
-                    <i class="fas fa-code"></i>
+            <h3 style="margin-top: 50px; margin-bottom: 30px;">Destaques e Conquistas</h3>
+            <div class="destaques-grid">
+                <div class="destaque">
+                    <div class="destaque-icon">🏆</div>
+                    <h4>Alta Taxa de Aprovação</h4>
+                    <p>Mantive taxa de aprovação acima de 85% nas turmas</p>
                 </div>
-                <h2>Experimentos de Código</h2>
-                <p>Testes, práticas e pequenos projetos</p>
-                <a href="experimentos.html" class="card-link">
-                    Acessar <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <!-- Card Placeholder - você pode adicionar mais -->
-            <div class="project-card coming-soon">
-                <div class="card-icon">
-                    <i class="fas fa-plus"></i>
+                <div class="destaque">
+                    <div class="destaque-icon">👥</div>
+                    <h4>Atendimento Personalizado</h4>
+                    <p>Acompanhamento de mais de 200 alunos</p>
                 </div>
-                <h2>Em breve...</h2>
-                <p>Mais projetos e conteúdos em desenvolvimento</p>
+                <div class="destaque">
+                    <div class="destaque-icon">⭐</div>
+                    <h4>Avaliação Positiva</h4>
+                    <p>Média de 4.8/5 na satisfação dos estudantes</p>
+                </div>
+                <div class="destaque">
+                    <div class="destaque-icon">💡</div>
+                    <h4>Inovação Pedagógica</h4>
+                    <p>Desenvolvimento de estratégias criativas</p>
+                </div>
             </div>
-        </main>
+        </section>
 
-        <footer class="main-footer">
-            <div class="social-links">
-                <a href="mailto:seu.email@exemplo.com" title="Email">
-                    <i class="fas fa-envelope"></i>
-                </a>
-                <a href="https://linkedin.com/in/seu-perfil" target="_blank" title="LinkedIn">
-                    <i class="fab fa-linkedin"></i>
-                </a>
-                <a href="https://github.com/seu-usuario" target="_blank" title="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
+        <section>
+            <h2>Habilidades e Competências</h2>
+            <div class="habilidades-grid">
+                <div class="habilidade-categoria">
+                    <h3>📚 Pedagógicas</h3>
+                    <ul>
+                        <li>Metodologias Ativas</li>
+                        <li>Tutoria Online</li>
+                        <li>Design Instrucional</li>
+                        <li>Avaliação da Aprendizagem</li>
+                        <li>Feedback Construtivo</li>
+                    </ul>
+                </div>
+                <div class="habilidade-categoria">
+                    <h3>💻 Tecnológicas</h3>
+                    <ul>
+                        <li>Plataformas LMS</li>
+                        <li>Ferramentas de Videoconferência</li>
+                        <li>Google Workspace</li>
+                        <li>Ferramentas de Gamificação</li>
+                        <li>Edição Básica de Vídeos</li>
+                    </ul>
+                </div>
+                <div class="habilidade-categoria">
+                    <h3>🤝 Interpessoais</h3>
+                    <ul>
+                        <li>Comunicação Clara</li>
+                        <li>Gestão de Conflitos</li>
+                        <li>Trabalho em Equipe</li>
+                        <li>Adaptabilidade</li>
+                        <li>Proatividade</li>
+                    </ul>
+                </div>
             </div>
-            <p>&copy; 2024 - Todos os direitos reservados</p>
-        </footer>
+        </section>
+
+        <section>
+            <h2>Contato</h2>
+            <div class="contato-info">
+                <a href="mailto:seu.email@exemplo.com" class="contato-item">📧 seu.email@exemplo.com</a>
+                <a href="https://linkedin.com/in/seu-perfil" target="_blank" class="contato-item">💼 LinkedIn</a>
+                <a href="https://github.com/seu-usuario" target="_blank" class="contato-item">💻 GitHub</a>
+            </div>
+        </section>
     </div>
 </body>
 </html>

@@ -4,64 +4,424 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checklist de Disciplinas</title>
-    <link rel="stylesheet" href="css/checklist.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: #555;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .back-link:hover {
+            color: #2c3e50;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .add-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        #disciplina-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        #disciplina-input:focus {
+            outline: none;
+            border-color: #888;
+        }
+
+        .btn-add {
+            padding: 12px 24px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .btn-add:hover {
+            background: #34495e;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px 16px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .filter-btn:hover {
+            border-color: #888;
+        }
+
+        .filter-btn.active {
+            background: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        .count {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-left: 6px;
+        }
+
+        .filter-btn.active .count {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .disciplinas-list {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 200px;
+        }
+
+        .disciplina-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .disciplina-item:last-child {
+            border-bottom: none;
+        }
+
+        .disciplina-item.completed .disciplina-text {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .disciplina-item.completed .checkbox {
+            background: #2c3e50;
+            border-color: #2c3e50;
+            color: white;
+        }
+
+        .disciplina-text {
+            flex: 1;
+            color: #333;
+        }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 1.1rem;
+        }
+
+        .btn-delete:hover {
+            color: #e74c3c;
+        }
+
+        .empty-state {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state.show {
+            display: block;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .empty-state small {
+            font-size: 0.9rem;
+        }
+
+        .bulk-actions {
+            text-align: center;
+        }
+
+        .btn-clear {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .btn-clear.show {
+            display: inline-block;
+        }
+
+        .btn-clear:hover {
+            background: #c0392b;
+        }
+
+        @media (max-width: 768px) {
+            .input-group {
+                flex-direction: column;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
+        <a href="index.html" class="back-link">← Voltar</a>
+        
         <header>
-            <a href="index.html" class="back-button">
-                <i class="fas fa-arrow-left"></i> Voltar
-            </a>
-            <h1><i class="fas fa-graduation-cap"></i> Checklist de Disciplinas</h1>
+            <h1>Checklist de Disciplinas</h1>
             <p class="subtitle">Organize suas disciplinas e acompanhe seu progresso</p>
         </header>
 
-        <main>
-            <!-- Formulário para adicionar disciplina -->
-            <section class="add-section">
-                <div class="input-group">
-                    <input type="text" id="disciplina-input" placeholder="Nome da disciplina...">
-                    <button id="add-btn" class="btn-add">
-                        <i class="fas fa-plus"></i> Adicionar
-                    </button>
-                </div>
-            </section>
-
-            <!-- Filtros -->
-            <section class="filters">
-                <button class="filter-btn active" data-filter="all">
-                    Todas <span class="count" id="count-all">0</span>
-                </button>
-                <button class="filter-btn" data-filter="active">
-                    Em Andamento <span class="count" id="count-active">0</span>
-                </button>
-                <button class="filter-btn" data-filter="completed">
-                    Concluídas <span class="count" id="count-completed">0</span>
-                </button>
-            </section>
-
-            <!-- Lista de disciplinas -->
-            <section class="disciplinas-list" id="disciplinas-list">
-                <!-- Disciplinas serão adicionadas aqui via JavaScript -->
-            </section>
-
-            <!-- Mensagem vazia -->
-            <div class="empty-state" id="empty-state">
-                <i class="fas fa-book-open"></i>
-                <p>Nenhuma disciplina adicionada ainda</p>
-                <small>Comece adicionando uma disciplina acima</small>
+        <div class="add-section">
+            <div class="input-group">
+                <input type="text" id="disciplina-input" placeholder="Nome da disciplina...">
+                <button id="add-btn" class="btn-add">Adicionar</button>
             </div>
+        </div>
 
-            <!-- Ações em massa -->
-            <section class="bulk-actions" id="bulk-actions">
-                <button class="btn-clear" id="clear-completed">
-                    <i class="fas fa-trash"></i> Limpar Concluídas
-                </button>
-            </section>
-        </main>
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">
+                Todas <span class="count" id="count-all">0</span>
+            </button>
+            <button class="filter-btn" data-filter="active">
+                Em Andamento <span class="count" id="count-active">0</span>
+            </button>
+            <button class="filter-btn" data-filter="completed">
+                Concluídas <span class="count" id="count-completed">0</span>
+            </button>
+        </div>
+
+        <div class="disciplinas-list" id="disciplinas-list"></div>
+
+        <div class="empty-state" id="empty-state">
+            <p>Nenhuma disciplina adicionada ainda</p>
+            <small>Comece adicionando uma disciplina acima</small>
+        </div>
+
+        <div class="bulk-actions">
+            <button class="btn-clear" id="clear-completed">Limpar Concluídas</button>
+        </div>
     </div>
 
-    <script src="js/checklist.js"></script>
+    <script>
+        let disciplinas = JSON.parse(localStorage.getItem('disciplinas')) || [];
+        let filtroAtual = 'all';
+
+        const disciplinaInput = document.getElementById('disciplina-input');
+        const addBtn = document.getElementById('add-btn');
+        const disciplinasList = document.getElementById('disciplinas-list');
+        const emptyState = document.getElementById('empty-state');
+        const clearCompletedBtn = document.getElementById('clear-completed');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderDisciplinas();
+            updateCounts();
+        });
+
+        addBtn.addEventListener('click', addDisciplina);
+        disciplinaInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addDisciplina();
+        });
+
+        function addDisciplina() {
+            const texto = disciplinaInput.value.trim();
+            if (texto === '') return;
+
+            const novaDisciplina = {
+                id: Date.now(),
+                texto: texto,
+                concluida: false
+            };
+
+            disciplinas.unshift(novaDisciplina);
+            saveDisciplinas();
+            disciplinaInput.value = '';
+            renderDisciplinas();
+            updateCounts();
+        }
+
+        function renderDisciplinas() {
+            const disciplinasFiltradas = filtrarDisciplinas();
+            
+            if (disciplinasFiltradas.length === 0) {
+                emptyState.classList.add('show');
+                disciplinasList.innerHTML = '';
+                return;
+            }
+
+            emptyState.classList.remove('show');
+            
+            disciplinasList.innerHTML = disciplinasFiltradas.map(disciplina => `
+                <div class="disciplina-item ${disciplina.concluida ? 'completed' : ''}" data-id="${disciplina.id}">
+                    <div class="checkbox" onclick="toggleDisciplina(${disciplina.id})">
+                        ${disciplina.concluida ? '✓' : ''}
+                    </div>
+                    <span class="disciplina-text">${disciplina.texto}</span>
+                    <button class="btn-delete" onclick="deleteDisciplina(${disciplina.id})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function filtrarDisciplinas() {
+            switch(filtroAtual) {
+                case 'active': return disciplinas.filter(d => !d.concluida);
+                case 'completed': return disciplinas.filter(d => d.concluida);
+                default: return disciplinas;
+            }
+        }
+
+        function toggleDisciplina(id) {
+            disciplinas = disciplinas.map(disciplina => 
+                disciplina.id === id ? { ...disciplina, concluida: !disciplina.concluida } : disciplina
+            );
+            saveDisciplinas();
+            renderDisciplinas();
+            updateCounts();
+        }
+
+        function deleteDisciplina(id) {
+            if (confirm('Tem certeza que deseja excluir esta disciplina?')) {
+                disciplinas = disciplinas.filter(disciplina => disciplina.id !== id);
+                saveDisciplinas();
+                renderDisciplinas();
+                updateCounts();
+            }
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filtroAtual = btn.dataset.filter;
+                renderDisciplinas();
+            });
+        });
+
+        clearCompletedBtn.addEventListener('click', () => {
+            if (confirm('Deseja remover todas as disciplinas concluídas?')) {
+                disciplinas = disciplinas.filter(d => !d.concluida);
+                saveDisciplinas();
+                renderDisciplinas();
+                updateCounts();
+            }
+        });
+
+        function updateCounts() {
+            const total = disciplinas.length;
+            const ativas = disciplinas.filter(d => !d.concluida).length;
+            const concluidas = disciplinas.filter(d => d.concluida).length;
+
+            document.getElementById('count-all').textContent = total;
+            document.getElementById('count-active').textContent = ativas;
+            document.getElementById('count-completed').textContent = concluidas;
+
+            if (concluidas > 0) {
+                clearCompletedBtn.classList.add('show');
+            } else {
+                clearCompletedBtn.classList.remove('show');
+            }
+        }
+
+        function saveDisciplinas() {
+            localStorage.setItem('disciplinas', JSON.stringify(disciplinas));
+        }
+    </script>
 </body>
 </html>
