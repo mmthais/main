@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimentos de Código</title>
+    <link rel="stylesheet" href="css/experimentos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+            <h1><i class="fas fa-flask"></i> Experimentos de Código</h1>
+            <p class="subtitle">Testes, práticas e pequenos projetos</p>
+        </header>
+
+        <main class="experiments-grid">
+            <!-- Experimento 1 - Exemplo de calculadora -->
+            <div class="experiment-card">
+                <div class="experiment-header">
+                    <h3>Calculadora Simples</h3>
+                    <span class="tag">JavaScript</span>
+                </div>
+                <p>Uma calculadora básica com as quatro operações fundamentais</p>
+                <div class="experiment-demo">
+                    <div class="calculator">
+                        <input type="text" id="calc-display" readonly placeholder="0">
+                        <div class="calc-buttons">
+                            <button onclick="appendToDisplay('7')">7</button>
+                            <button onclick="appendToDisplay('8')">8</button>
+                            <button onclick="appendToDisplay('9')">9</button>
+                            <button onclick="appendToDisplay('/')" class="operator">÷</button>
+                            
+                            <button onclick="appendToDisplay('4')">4</button>
+                            <button onclick="appendToDisplay('5')">5</button>
+                            <button onclick="appendToDisplay('6')">6</button>
+                            <button onclick="appendToDisplay('*')" class="operator">×</button>
+                            
+                            <button onclick="appendToDisplay('1')">1</button>
+                            <button onclick="appendToDisplay('2')">2</button>
+                            <button onclick="appendToDisplay('3')">3</button>
+                            <button onclick="appendToDisplay('-')" class="operator">-</button>
+                            
+                            <button onclick="clearDisplay()" class="clear">C</button>
+                            <button onclick="appendToDisplay('0')">0</button>
+                            <button onclick="calculate()" class="equals">=</button>
+                            <button onclick="appendToDisplay('+')" class="operator">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experimento 2 - Contador -->
+            <div class="experiment-card">
+                <div class="experiment-header">
+                    <h3>Contador</h3>
+                    <span class="tag">JavaScript</span>
+                </div>
+                <p>Contador simples com incremento e decremento</p>
+                <div class="experiment-demo">
+                    <div class="counter">
+                        <button onclick="decrementar()" class="counter-btn">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span id="counter-display" class="counter-display">0</span>
+                        <button onclick="incrementar()" class="counter-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button onclick="resetarContador()" class="reset-btn">Resetar</button>
+                </div>
+            </div>
+
+            <!-- Experimento 3 - Placeholder para novos testes -->
+            <div class="experiment-card placeholder">
+                <div class="experiment-header">
+                    <h3>Seu Próximo Experimento</h3>
+                    <span class="tag">Em breve</span>
+                </div>
+                <p>Adicione aqui seus testes e práticas de código</p>
+                <div class="experiment-demo">
+                    <div class="placeholder-content">
+                        <i class="fas fa-code"></i>
+                        <p>Espaço reservado para seus experimentos</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <section class="instructions">
+            <h2><i class="fas fa-info-circle"></i> Como Adicionar Novos Experimentos</h2>
+            <div class="instructions-content">
+                <ol>
+                    <li>Abra o arquivo <code>experimentos.html</code></li>
+                    <li>Copie o bloco <code>&lt;div class="experiment-card"&gt;</code></li>
+                    <li>Cole e modifique com seu próprio código</li>
+                    <li>Adicione o JavaScript correspondente no final do arquivo ou em <code>experimentos.js</code></li>
+                </ol>
+            </div>
+        </section>
+    </div>
+
+    <script src="js/experimentos.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist de Disciplinas</title>
+    <link rel="stylesheet" href="css/checklist.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+            <h1><i class="fas fa-graduation-cap"></i> Checklist de Disciplinas</h1>
+            <p class="subtitle">Organize suas disciplinas e acompanhe seu progresso</p>
+        </header>
+
+        <main>
+            <!-- Formulário para adicionar disciplina -->
+            <section class="add-section">
+                <div class="input-group">
+                    <input type="text" id="disciplina-input" placeholder="Nome da disciplina...">
+                    <button id="add-btn" class="btn-add">
+                        <i class="fas fa-plus"></i> Adicionar
+                    </button>
+                </div>
+            </section>
+
+            <!-- Filtros -->
+            <section class="filters">
+                <button class="filter-btn active" data-filter="all">
+                    Todas <span class="count" id="count-all">0</span>
+                </button>
+                <button class="filter-btn" data-filter="active">
+                    Em Andamento <span class="count" id="count-active">0</span>
+                </button>
+                <button class="filter-btn" data-filter="completed">
+                    Concluídas <span class="count" id="count-completed">0</span>
+                </button>
+            </section>
+
+            <!-- Lista de disciplinas -->
+            <section class="disciplinas-list" id="disciplinas-list">
+                <!-- Disciplinas serão adicionadas aqui via JavaScript -->
+            </section>
+
+            <!-- Mensagem vazia -->
+            <div class="empty-state" id="empty-state">
+                <i class="fas fa-book-open"></i>
+                <p>Nenhuma disciplina adicionada ainda</p>
+                <small>Comece adicionando uma disciplina acima</small>
+            </div>
+
+            <!-- Ações em massa -->
+            <section class="bulk-actions" id="bulk-actions">
+                <button class="btn-clear" id="clear-completed">
+                    <i class="fas fa-trash"></i> Limpar Concluídas
+                </button>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/checklist.js"></script>
+</body>
+</html>
