@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist de Disciplinas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(200deg, #A6A6A6 0%, #151524 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .controls-left, .controls-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-delete {
+            background: #ef4444;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        /* Seletor de modalidade */
+        .mode-switch {
+            display: inline-flex;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f9fafb;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #374151;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .mode-btn:hover {
+            background: rgba(102,126,234,0.12);
+        }
+
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .mode-hint {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .disciplinas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .disciplina-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .disciplina-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .card-header input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .card-header input[type="text"]:first-child {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .checklist-item {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checklist-item label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .checklist-item input[type="text"],
+        .checklist-item input[type="datetime-local"] {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+
+        .item-label {
+            font-weight: 500;
+            color: #374151;
+            min-width: 120px;
+        }
+
+        .delete-card {
+            width: 100%;
+            margin-top: 15px;
+            padding: 8px;
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .delete-card:hover {
+            background: #fecaca;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .status-sim {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-nao {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        @media (max-width: 768px) {
+            .disciplinas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .controls {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Checklist de Disciplinas</h1>
+        <div class="subtitle">Controle interno de disciplinas tutoradas • <b id="modoTitulo"></b></div>
+
+        <div class="controls">
+            <div class="controls-left">
+                <div class="mode-switch" role="tablist" aria-label="Selecione a modalidade">
+                    <button class="mode-btn" id="btnPleno" onclick="trocarModo('pleno')" type="button">EaD Pleno</button>
+                    <button class="mode-btn" id="btnPresencial" onclick="trocarModo('presencial')" type="button">EaD Presencial</button>
+                </div>
+                <span class="mode-hint">Cada modalidade salva seu checklist separadamente.</span>
+            </div>
+
+            <div class="controls-right">
+                <button class="btn" onclick="adicionarDisciplina()" type="button">+ Nova Disciplina</button>
+                <button class="btn btn-delete" onclick="limparTudo()" type="button">🗑️ Limpar Tudo</button>
+            </div>
+        </div>
+
+        <div class="disciplinas-grid" id="disciplinasGrid"></div>
+    </div>
+
+    <script>
+        // ======= Modalidades com checklist separado (localStorage) =======
+        const MODOS = {
+            pleno: { label: "EaD Pleno", storageKey: "disciplinas_ead_pleno" },
+            presencial: { label: "EaD Presencial", storageKey: "disciplinas_ead_presencial" }
+        };
+
+        // migração simples: se você tinha dados antigos em "disciplinas", joga para EaD Pleno uma única vez
+        (function migrarDadosAntigos() {
+            const antigo = localStorage.getItem("disciplinas");
+            const jaMigrou = localStorage.getItem("disciplinas_migrado_v2");
+            if (antigo && !jaMigrou) {
+                localStorage.setItem(MODOS.pleno.storageKey, antigo);
+                localStorage.removeItem("disciplinas");
+                localStorage.setItem("disciplinas_migrado_v2", "true");
+            }
+        })();
+
+        let modoAtual = localStorage.getItem("modoChecklist") || "pleno";
+        let disciplinas = [];
+
+        function chaveAtual() {
+            return MODOS[modoAtual].storageKey;
+        }
+
+        function carregarDados() {
+            disciplinas = JSON.parse(localStorage.getItem(chaveAtual())) || [];
+        }
+
+        function salvarDados() {
+            localStorage.setItem(chaveAtual(), JSON.stringify(disciplinas));
+        }
+
+        function atualizarUIModo() {
+            document.getElementById("btnPleno").classList.toggle("active", modoAtual === "pleno");
+            document.getElementById("btnPresencial").classList.toggle("active", modoAtual === "presencial");
+            document.getElementById("modoTitulo").textContent = MODOS[modoAtual].label;
+        }
+
+        function trocarModo(novoModo) {
+            if (!MODOS[novoModo]) return;
+            if (novoModo === modoAtual) return;
+
+            // garante que o estado atual está salvo (normalmente já está, mas é seguro)
+            salvarDados();
+
+            modoAtual = novoModo;
+            localStorage.setItem("modoChecklist", modoAtual);
+
+            carregarDados();
+            atualizarUIModo();
+            renderizar();
+        }
+
+        // ======= CRUD de disciplinas =======
+        function adicionarDisciplina() {
+            const novaDisciplina = {
+                id: Date.now(),
+                nome: "",
+                professor: "",
+                videoBoasVindas: false,
+                planoEnsino: false,
+                aulaAoVivo1: "",
+                aulaAoVivo2: "",
+                plantaoSemanal: ""
+            };
+
+            disciplinas.push(novaDisciplina);
+            salvarDados();
+            renderizar();
+        }
+
+        function deletarDisciplina(id) {
+            if (confirm("Tem certeza que deseja deletar esta disciplina?")) {
+                disciplinas = disciplinas.filter(d => d.id !== id);
+                salvarDados();
+                renderizar();
+            }
+        }
+
+        function atualizarCampo(id, campo, valor) {
+            const disciplina = disciplinas.find(d => d.id === id);
+            if (disciplina) {
+                disciplina[campo] = valor;
+                salvarDados();
+                renderizar();
+            }
+        }
+
+        function limparTudo() {
+            const modoLabel = MODOS[modoAtual].label;
+            if (confirm(`Tem certeza que deseja limpar TODAS as disciplinas de "${modoLabel}"? Esta ação não pode ser desfeita.`)) {
+                disciplinas = [];
+                salvarDados();
+                renderizar();
+            }
+        }
+
+        function renderizar() {
+            const grid = document.getElementById("disciplinasGrid");
+
+            if (disciplinas.length === 0) {
+                grid.innerHTML = '<p style="color: white; text-align: center; grid-column: 1/-1;">Nenhuma disciplina cadastrada nesta modalidade. Clique em "Nova Disciplina" para começar.</p>';
+                return;
+            }
+
+            grid.innerHTML = disciplinas.map(disc => `
+                <div class="disciplina-card">
+                    <div class="card-header">
+                        <input
+                            type="text"
+                            placeholder="Nome da Disciplina"
+                            value="${disc.nome}"
+                            onchange="atualizarCampo(${disc.id}, 'nome', this.value)"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Professor(a)"
+                            value="${disc.professor}"
+                            onchange="atualizarCampo(${disc.id}, 'professor', this.value)"
+                        />
+                    </div>
+
+                    <div class="checklist-item">
+                        <label>
+                            <input
+                                type="checkbox"
+                                ${disc.videoBoasVindas ? "checked" : ""}
+                                onchange="atualizarCampo(${disc.id}, 'videoBoasVindas', this.checked)"
+                            />
+                            <span class="item-label">Vídeo de boas-vindas</span>
+                        </label>
+                        <span class="status-badge ${disc.videoBoasVindas ? "status-sim" : "status-nao"}">
+                            ${disc.videoBoasVindas ? "Postou" : "Não postou"}
+                        </span>
+                    </div>
+
+                    <div class="checklist-item">
+                        <label>
+                            <input
+                                type="checkbox"
+                                ${disc.planoEnsino ? "checked" : ""}
+                                onchange="atualizarCampo(${disc.id}, 'planoEnsino', this.checked)"
+                            />
+                            <span class="item-label">Plano de ensino</span>
+                        </label>
+                        <span class="status-badge ${disc.planoEnsino ? "status-sim" : "status-nao"}">
+                            ${disc.planoEnsino ? "Postou" : "Não postou"}
+                        </span>
+                    </div>
+
+                    <div class="checklist-item">
+                        <span class="item-label">Aula ao vivo 1:</span>
+                        <input
+                            type="datetime-local"
+                            value="${disc.aulaAoVivo1}"
+                            onchange="atualizarCampo(${disc.id}, 'aulaAoVivo1', this.value)"
+                        />
+                    </div>
+
+                    <div class="checklist-item">
+                        <span class="item-label">Aula ao vivo 2:</span>
+                        <input
+                            type="datetime-local"
+                            value="${disc.aulaAoVivo2}"
+                            onchange="atualizarCampo(${disc.id}, 'aulaAoVivo2', this.value)"
+                        />
+                    </div>
+
+                    <div class="checklist-item">
+                        <span class="item-label">Plantão semanal:</span>
+                        <input
+                            type="text"
+                            placeholder="Ex: Segunda às 14h"
+                            value="${disc.plantaoSemanal}"
+                            onchange="atualizarCampo(${disc.id}, 'plantaoSemanal', this.value)"
+                        />
+                    </div>
+
+                    <button class="btn delete-card" onclick="deletarDisciplina(${disc.id})" type="button">
+                        🗑️ Deletar Disciplina
+                    </button>
+                </div>
+            `).join("");
+        }
+
+        // ======= Inicialização =======
+        carregarDados();
+        atualizarUIModo();
+        renderizar();
+    </script>
+</body>
+</html>
