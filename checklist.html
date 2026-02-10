@@ -26,9 +26,17 @@
         h1 {
             color: white;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             font-size: 2.5em;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1rem;
         }
 
         .controls {
@@ -37,6 +45,18 @@
             border-radius: 10px;
             margin-bottom: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .controls-left, .controls-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         .btn {
@@ -49,6 +69,7 @@
             font-size: 16px;
             font-weight: 600;
             transition: all 0.3s;
+            white-space: nowrap;
         }
 
         .btn:hover {
@@ -59,11 +80,43 @@
 
         .btn-delete {
             background: #ef4444;
-            margin-left: 10px;
         }
 
         .btn-delete:hover {
             background: #dc2626;
+        }
+
+        /* Seletor de modalidade */
+        .mode-switch {
+            display: inline-flex;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f9fafb;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #374151;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .mode-btn:hover {
+            background: rgba(102,126,234,0.12);
+        }
+
+        .mode-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .mode-hint {
+            font-size: 13px;
+            color: #6b7280;
         }
 
         .disciplinas-grid {
@@ -164,6 +217,7 @@
             font-size: 12px;
             font-weight: 600;
             margin-left: 10px;
+            white-space: nowrap;
         }
 
         .status-sim {
@@ -180,52 +234,114 @@
             .disciplinas-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             h1 {
                 font-size: 1.8em;
+            }
+
+            .controls {
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📚 Checklist de Disciplinas - 
-        Controle interno de disciplinas tutoradas</h1>
+        <h1>📚 Checklist de Disciplinas</h1>
+        <div class="subtitle">Controle interno de disciplinas tutoradas • <b id="modoTitulo"></b></div>
+
         <div class="controls">
-            <button class="btn" onclick="adicionarDisciplina()">+ Nova Disciplina</button>
-            <button class="btn btn-delete" onclick="limparTudo()">🗑️ Limpar Tudo</button>
+            <div class="controls-left">
+                <div class="mode-switch" role="tablist" aria-label="Selecione a modalidade">
+                    <button class="mode-btn" id="btnPleno" onclick="trocarModo('pleno')" type="button">EaD Pleno</button>
+                    <button class="mode-btn" id="btnPresencial" onclick="trocarModo('presencial')" type="button">EaD Presencial</button>
+                </div>
+                <span class="mode-hint">Cada modalidade salva seu checklist separadamente.</span>
+            </div>
+
+            <div class="controls-right">
+                <button class="btn" onclick="adicionarDisciplina()" type="button">+ Nova Disciplina</button>
+                <button class="btn btn-delete" onclick="limparTudo()" type="button">🗑️ Limpar Tudo</button>
+            </div>
         </div>
 
         <div class="disciplinas-grid" id="disciplinasGrid"></div>
     </div>
 
     <script>
-        // Carregar dados salvos ao iniciar
-        let disciplinas = JSON.parse(localStorage.getItem('disciplinas')) || [];
+        // ======= Modalidades com checklist separado (localStorage) =======
+        const MODOS = {
+            pleno: { label: "EaD Pleno", storageKey: "disciplinas_ead_pleno" },
+            presencial: { label: "EaD Presencial", storageKey: "disciplinas_ead_presencial" }
+        };
 
-        function salvarDados() {
-            localStorage.setItem('disciplinas', JSON.stringify(disciplinas));
+        // migração simples: se você tinha dados antigos em "disciplinas", joga para EaD Pleno uma única vez
+        (function migrarDadosAntigos() {
+            const antigo = localStorage.getItem("disciplinas");
+            const jaMigrou = localStorage.getItem("disciplinas_migrado_v2");
+            if (antigo && !jaMigrou) {
+                localStorage.setItem(MODOS.pleno.storageKey, antigo);
+                localStorage.removeItem("disciplinas");
+                localStorage.setItem("disciplinas_migrado_v2", "true");
+            }
+        })();
+
+        let modoAtual = localStorage.getItem("modoChecklist") || "pleno";
+        let disciplinas = [];
+
+        function chaveAtual() {
+            return MODOS[modoAtual].storageKey;
         }
 
+        function carregarDados() {
+            disciplinas = JSON.parse(localStorage.getItem(chaveAtual())) || [];
+        }
+
+        function salvarDados() {
+            localStorage.setItem(chaveAtual(), JSON.stringify(disciplinas));
+        }
+
+        function atualizarUIModo() {
+            document.getElementById("btnPleno").classList.toggle("active", modoAtual === "pleno");
+            document.getElementById("btnPresencial").classList.toggle("active", modoAtual === "presencial");
+            document.getElementById("modoTitulo").textContent = MODOS[modoAtual].label;
+        }
+
+        function trocarModo(novoModo) {
+            if (!MODOS[novoModo]) return;
+            if (novoModo === modoAtual) return;
+
+            // garante que o estado atual está salvo (normalmente já está, mas é seguro)
+            salvarDados();
+
+            modoAtual = novoModo;
+            localStorage.setItem("modoChecklist", modoAtual);
+
+            carregarDados();
+            atualizarUIModo();
+            renderizar();
+        }
+
+        // ======= CRUD de disciplinas =======
         function adicionarDisciplina() {
             const novaDisciplina = {
                 id: Date.now(),
-                nome: '',
-                professor: '',
+                nome: "",
+                professor: "",
                 videoBoasVindas: false,
                 planoEnsino: false,
-                aulaAoVivo1: '',
-                aulaAoVivo2: '',
-                plantaoSemanal: ''
+                aulaAoVivo1: "",
+                aulaAoVivo2: "",
+                plantaoSemanal: ""
             };
-            
+
             disciplinas.push(novaDisciplina);
             salvarDados();
             renderizar();
         }
 
         function deletarDisciplina(id) {
-            if (confirm('Tem certeza que deseja deletar esta disciplina?')) {
+            if (confirm("Tem certeza que deseja deletar esta disciplina?")) {
                 disciplinas = disciplinas.filter(d => d.id !== id);
                 salvarDados();
                 renderizar();
@@ -242,7 +358,8 @@
         }
 
         function limparTudo() {
-            if (confirm('Tem certeza que deseja limpar TODAS as disciplinas? Esta ação não pode ser desfeita.')) {
+            const modoLabel = MODOS[modoAtual].label;
+            if (confirm(`Tem certeza que deseja limpar TODAS as disciplinas de "${modoLabel}"? Esta ação não pode ser desfeita.`)) {
                 disciplinas = [];
                 salvarDados();
                 renderizar();
@@ -250,25 +367,25 @@
         }
 
         function renderizar() {
-            const grid = document.getElementById('disciplinasGrid');
-            
+            const grid = document.getElementById("disciplinasGrid");
+
             if (disciplinas.length === 0) {
-                grid.innerHTML = '<p style="color: white; text-align: center; grid-column: 1/-1;">Nenhuma disciplina cadastrada. Clique em "Nova Disciplina" para começar.</p>';
+                grid.innerHTML = '<p style="color: white; text-align: center; grid-column: 1/-1;">Nenhuma disciplina cadastrada nesta modalidade. Clique em "Nova Disciplina" para começar.</p>';
                 return;
             }
 
             grid.innerHTML = disciplinas.map(disc => `
                 <div class="disciplina-card">
                     <div class="card-header">
-                        <input 
-                            type="text" 
-                            placeholder="Nome da Disciplina" 
+                        <input
+                            type="text"
+                            placeholder="Nome da Disciplina"
                             value="${disc.nome}"
                             onchange="atualizarCampo(${disc.id}, 'nome', this.value)"
                         />
-                        <input 
-                            type="text" 
-                            placeholder="Professor(a)" 
+                        <input
+                            type="text"
+                            placeholder="Professor(a)"
                             value="${disc.professor}"
                             onchange="atualizarCampo(${disc.id}, 'professor', this.value)"
                         />
@@ -276,36 +393,36 @@
 
                     <div class="checklist-item">
                         <label>
-                            <input 
-                                type="checkbox" 
-                                ${disc.videoBoasVindas ? 'checked' : ''}
+                            <input
+                                type="checkbox"
+                                ${disc.videoBoasVindas ? "checked" : ""}
                                 onchange="atualizarCampo(${disc.id}, 'videoBoasVindas', this.checked)"
                             />
                             <span class="item-label">Vídeo de boas-vindas</span>
                         </label>
-                        <span class="status-badge ${disc.videoBoasVindas ? 'status-sim' : 'status-nao'}">
-                            ${disc.videoBoasVindas ? 'Postou' : 'Não postou'}
+                        <span class="status-badge ${disc.videoBoasVindas ? "status-sim" : "status-nao"}">
+                            ${disc.videoBoasVindas ? "Postou" : "Não postou"}
                         </span>
                     </div>
 
                     <div class="checklist-item">
                         <label>
-                            <input 
-                                type="checkbox" 
-                                ${disc.planoEnsino ? 'checked' : ''}
+                            <input
+                                type="checkbox"
+                                ${disc.planoEnsino ? "checked" : ""}
                                 onchange="atualizarCampo(${disc.id}, 'planoEnsino', this.checked)"
                             />
                             <span class="item-label">Plano de ensino</span>
                         </label>
-                        <span class="status-badge ${disc.planoEnsino ? 'status-sim' : 'status-nao'}">
-                            ${disc.planoEnsino ? 'Postou' : 'Não postou'}
+                        <span class="status-badge ${disc.planoEnsino ? "status-sim" : "status-nao"}">
+                            ${disc.planoEnsino ? "Postou" : "Não postou"}
                         </span>
                     </div>
 
                     <div class="checklist-item">
                         <span class="item-label">Aula ao vivo 1:</span>
-                        <input 
-                            type="datetime-local" 
+                        <input
+                            type="datetime-local"
                             value="${disc.aulaAoVivo1}"
                             onchange="atualizarCampo(${disc.id}, 'aulaAoVivo1', this.value)"
                         />
@@ -313,8 +430,8 @@
 
                     <div class="checklist-item">
                         <span class="item-label">Aula ao vivo 2:</span>
-                        <input 
-                            type="datetime-local" 
+                        <input
+                            type="datetime-local"
                             value="${disc.aulaAoVivo2}"
                             onchange="atualizarCampo(${disc.id}, 'aulaAoVivo2', this.value)"
                         />
@@ -322,22 +439,24 @@
 
                     <div class="checklist-item">
                         <span class="item-label">Plantão semanal:</span>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             placeholder="Ex: Segunda às 14h"
                             value="${disc.plantaoSemanal}"
                             onchange="atualizarCampo(${disc.id}, 'plantaoSemanal', this.value)"
                         />
                     </div>
 
-                    <button class="btn delete-card" onclick="deletarDisciplina(${disc.id})">
+                    <button class="btn delete-card" onclick="deletarDisciplina(${disc.id})" type="button">
                         🗑️ Deletar Disciplina
                     </button>
                 </div>
-            `).join('');
+            `).join("");
         }
 
-        // Renderizar ao carregar a página
+        // ======= Inicialização =======
+        carregarDados();
+        atualizarUIModo();
         renderizar();
     </script>
 </body>
