@@ -388,6 +388,12 @@
                             placeholder="Professor(a)"
                             value="${disc.professor}"
                             onchange="atualizarCampo(${disc.id}, 'professor', this.value)"
+
+                            <input
+                            type="text"
+                            placeholder="Carga Horária. Ex. 80h, 40h"
+                            value="${disc.ch}"
+                            onchange="atualizarCampo(${disc.id}, 'ch', this.value)"
                         />
                     </div>
 
@@ -416,6 +422,19 @@
                         </label>
                         <span class="status-badge ${disc.planoEnsino ? "status-sim" : "status-nao"}">
                             ${disc.planoEnsino ? "Postou" : "Não postou"}
+                        </span>
+                    </div>
+                    <div class="checklist-item">
+                        <label>
+                            <input
+                                type="checkbox"
+                                ${disc.planoEnsino ? "checked" : ""}
+                                onchange="atualizarCampo(${disc.id}, 'planoEnsino', this.checked)"
+                            />
+                            <span class="item-label">É disciplina de extensão?</span>
+                        </label>
+                        <span class="status-badge ${disc.ext ? "status-sim" : "status-nao"}">
+                            ${disc.ext ? "Sim" : "Não"}
                         </span>
                     </div>
 
