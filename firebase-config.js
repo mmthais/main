@@ -1,4 +1,4 @@
-// Preenchido com o seu projeto Firebase
+// ✅ NÃO coloque imports aqui. Este arquivo só EXPORTA o objeto de configuração.
 export const firebaseConfig = {
   apiKey: "AIzaSyATm-VZArjMfEs1d6JmmuUM8a7a45HXLJg",
   authDomain: "checklist-a150c.firebaseapp.com",
