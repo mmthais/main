@@ -241,7 +241,7 @@ window.adicionarDisciplina = async function adicionarDisciplina() {
 
   const nova =
     tabAtiva === "pleno"
-      ? { ...base, extensao: false, aulaAoVivo1: "", aulaAoVivo2: "" }
+      ? { ...base, aulaAoVivo1: "", aulaAoVivo2: "", extensao: "nao" }
       : base; // presencial não tem aulas ao vivo
 
   if (uid) {
@@ -315,6 +315,9 @@ function renderizar() {
 
   grid.innerHTML = lista.map((disc) => {
     const a1 = tabAtiva === "pleno" ? getAulaStatus(disc.aulaAoVivo1) : null;
+
+    // garante valor padrão para disciplinas antigas
+    const extensao = (tabAtiva === "pleno" ? (disc.extensao || "nao") : "nao");
     const a2 = tabAtiva === "pleno" ? getAulaStatus(disc.aulaAoVivo2) : null;
 
     const aulasAoVivoHtml = tabAtiva === "pleno" ? `
@@ -342,18 +345,6 @@ function renderizar() {
           <input type="text" placeholder="Professor(a)"
             value="${escapeHtml(disc.professor)}"
             onchange="atualizarCampo(${disc.id}, 'professor', this.value)" />
-          ${tabAtiva === "pleno" ? `
-          <div class="toggle-wrap">
-            <span class="toggle-label">Disciplina de extensão?</span>
-            <div class="toggle" role="group" aria-label="Disciplina de extensão">
-              <button class="yes ${!!disc.extensao ? "active" : ""}" type="button"
-                onclick="atualizarCampo(${disc.id}, 'extensao', true)">SIM</button>
-              <button class="no ${!disc.extensao ? "active" : ""}" type="button"
-                onclick="atualizarCampo(${disc.id}, 'extensao', false)">NÃO</button>
-            </div>
-          </div>
-          ` : ``}
-
         </div>
 
         <div class="checklist-item">
@@ -377,6 +368,16 @@ function renderizar() {
             ${disc.planoEnsino ? "Postou" : "Não postou"}
           </span>
         </div>
+
+        ${tabAtiva === 'pleno' ? `
+        <div class="checklist-item">
+          <span class="item-label">Extensão?</span>
+          <div class="segment" role="group" aria-label="Disciplina de extensão">
+            <button class="${extensao === 'sim' ? 'active' : ''}" onclick="atualizarCampo(${disc.id}, 'extensao', 'sim')">Sim</button>
+            <button class="no ${extensao === 'nao' ? 'active' : ''}" onclick="atualizarCampo(${disc.id}, 'extensao', 'nao')">Não</button>
+          </div>
+        </div>
+` : ''}
 
         ${aulasAoVivoHtml}
 

@@ -254,51 +254,30 @@ h1{
 }
 
 
-/* ===== Toggle Extensão (Sim/Não) ===== */
-.toggle-wrap{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:6px;
-}
-
-.toggle-label{
-  font-weight:800;
-  color:#0b2a4a;
-  font-size:13px;
-  white-space:nowrap;
-}
-
-.toggle{
+/* ===== Extensão (botões Sim/Não) ===== */
+.segment{
   display:inline-flex;
-  border-radius:999px;
+  border:1px solid #d1d5db;
+  border-radius:12px;
   overflow:hidden;
-  border:1px solid #e5e7eb;
-  background:#f3f4f6;
+  background:#fff;
 }
-
-.toggle button{
+.segment button{
   border:none;
   padding:8px 12px;
   cursor:pointer;
   font-weight:900;
   font-size:12px;
-  letter-spacing:.2px;
-  background:transparent;
-  color:#374151;
-  transition:filter .12s, transform .12s, background .12s, color .12s;
+  background:#f3f4f6;
+  color:#111827;
+  transition:filter .12s, transform .12s, background .12s;
 }
-
-.toggle button:hover{filter:brightness(.98)}
-.toggle button:active{transform:translateY(1px)}
-
-.toggle .yes.active{
-  background:#22c55e;
-  color:#052e16;
+.segment button:hover{filter:brightness(.98)}
+.segment button:active{transform:scale(.99)}
+.segment button.active{
+  background:#1f4f85;
+  color:#fff;
 }
-
-.toggle .no.active{
-  background:#ef4444;
-  color:#450a0a;
+.segment button.no.active{
+  background:#b91c1c;
 }
-
