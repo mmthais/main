@@ -241,7 +241,7 @@ window.adicionarDisciplina = async function adicionarDisciplina() {
 
   const nova =
     tabAtiva === "pleno"
-      ? { ...base, aulaAoVivo1: "", aulaAoVivo2: "" }
+      ? { ...base, extensao: false, aulaAoVivo1: "", aulaAoVivo2: "" }
       : base; // presencial não tem aulas ao vivo
 
   if (uid) {
@@ -342,6 +342,18 @@ function renderizar() {
           <input type="text" placeholder="Professor(a)"
             value="${escapeHtml(disc.professor)}"
             onchange="atualizarCampo(${disc.id}, 'professor', this.value)" />
+          ${tabAtiva === "pleno" ? `
+          <div class="toggle-wrap">
+            <span class="toggle-label">Disciplina de extensão?</span>
+            <div class="toggle" role="group" aria-label="Disciplina de extensão">
+              <button class="yes ${!!disc.extensao ? "active" : ""}" type="button"
+                onclick="atualizarCampo(${disc.id}, 'extensao', true)">SIM</button>
+              <button class="no ${!disc.extensao ? "active" : ""}" type="button"
+                onclick="atualizarCampo(${disc.id}, 'extensao', false)">NÃO</button>
+            </div>
+          </div>
+          ` : ``}
+
         </div>
 
         <div class="checklist-item">
