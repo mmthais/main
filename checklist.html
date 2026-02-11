@@ -3,35 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checklist de Disciplinas - EaD Pleno</title>
+  <title>Checklist de Disciplinas — EaD Pleno</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>📚 Checklist de Disciplinas - Controle interno de disciplinas tutoradas</h1>
+    <h1>📚 Checklist de Disciplinas — EaD Pleno</h1>
+    <div class="subheader">Controle interno de disciplinas tutoradas</div>
 
-    <div class="topbar">
-      <div class="controls">
-        <button class="btn" id="btnNova">+ Nova Disciplina</button>
-        <button class="btn btn-delete" id="btnLimpar">🗑️ Limpar Tudo</button>
+    <div class="controls">
+      <div class="left">
+        <button class="btn" onclick="adicionarDisciplina()">+ Nova Disciplina</button>
+        <button class="btn btn-delete" onclick="limparTudo()">🗑️ Limpar Tudo</button>
       </div>
 
-      <div class="statusline">
-        <span class="pill" title="Estado do armazenamento">
-          <span class="dot" id="storeDot"></span>
-          <span id="storeText">Carregando...</span>
-        </span>
+      <div class="right">
+        <span id="authPill" class="pill">💾 Local: <strong>Ativo</strong></span>
+        <button id="btnLogin" class="btn btn-secondary" onclick="loginGoogle()">Entrar com Google</button>
+        <button id="btnLogout" class="btn btn-secondary" onclick="logoutGoogle()" style="display:none;">Sair</button>
+      </div>
 
-        <button class="btn btn-secondary btn-small" id="btnLogin">Entrar com Google</button>
-        <button class="btn btn-secondary btn-small" id="btnLogout" style="display:none;">Sair</button>
+      <div class="small" id="cloudHint" style="width:100%; margin-top:4px;">
+        Sem login: salvando apenas no seu navegador (localStorage).
       </div>
     </div>
 
     <div class="disciplinas-grid" id="disciplinasGrid"></div>
-
-    <p class="note">
-
-    </p>
   </div>
 
   <script type="module" src="./app.js"></script>

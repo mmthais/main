@@ -1,43 +1,51 @@
+import { firebaseConfig } from "./firebase-config.js";
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 import {
-  watchUser,
-  loginWithGoogle,
-  logout,
-  watchDisciplinas,
-  upsertDisciplina,
-  removeDisciplina
-} from "./cloud.js";
+  getAuth,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-// --------------------
-// Estado + armazenamento
-// --------------------
-let disciplinas = [];
-let currentUser = null;
-let unsubscribeCloud = null;
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  deleteDoc,
+  onSnapshot,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-const LS_KEY = "disciplinas_ead_pleno_v2";
+/* =============================
+   Estado + utilidades
+============================= */
+const LOCAL_KEY = "disciplinas_local_cache_v1";
+let disciplinas = loadLocal();
+let uid = null;
+let unsubscribeSnapshot = null;
 
 function loadLocal() {
   try {
-    return JSON.parse(localStorage.getItem(LS_KEY)) || [];
+    return JSON.parse(localStorage.getItem(LOCAL_KEY)) || [];
   } catch {
     return [];
   }
 }
 
 function saveLocal() {
-  localStorage.setItem(LS_KEY, JSON.stringify(disciplinas));
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(disciplinas));
 }
 
-function setStoreStatus(kind, text) {
-  const dot = document.getElementById("storeDot");
-  const label = document.getElementById("storeText");
-  dot.className = "dot " + (kind || "");
-  label.textContent = text;
+function byId(a, b) {
+  return (a.id || 0) - (b.id || 0);
 }
 
-// --------------------
-// Util: destaque "aula ao vivo" até 24h
-// --------------------
+/* =============================
+   Destaque Aula ao vivo (<=24h)
+============================= */
 function parseDateTimeLocal(value) {
   if (!value) return null;
   const d = new Date(value);
@@ -64,11 +72,122 @@ function getAulaStatus(value) {
   return { isSoon: false, isToday: false, text: "" };
 }
 
-// --------------------
-// CRUD
-// --------------------
-function novaDisciplinaVazia() {
-  return {
+/* =============================
+   Firebase (Auth + Firestore)
+============================= */
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const $ = (sel) => document.querySelector(sel);
+
+function setAuthUI(isSignedIn, userEmail = "") {
+  const pill = $("#authPill");
+  const loginBtn = $("#btnLogin");
+  const logoutBtn = $("#btnLogout");
+  const hint = $("#cloudHint");
+
+  if (!pill || !loginBtn || !logoutBtn || !hint) return;
+
+  if (isSignedIn) {
+    pill.innerHTML = `☁️ Nuvem: <strong>Conectada</strong> <span class="small">(${escapeHtml(userEmail || "Google")})</span>`;
+    loginBtn.style.display = "none";
+    logoutBtn.style.display = "inline-flex";
+    hint.textContent = "Salvando automaticamente no Firestore (nuvem).";
+  } else {
+    pill.innerHTML = `💾 Local: <strong>Ativo</strong> <span class="small">(faça login p/ salvar na nuvem)</span>`;
+    loginBtn.style.display = "inline-flex";
+    logoutBtn.style.display = "none";
+    hint.textContent = "Sem login: salvando apenas no seu navegador (localStorage).";
+  }
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+async function cloudUpsert(obj) {
+  if (!uid) return;
+  const ref = doc(db, "users", uid, "disciplinas", String(obj.id));
+  await setDoc(ref, obj, { merge: false });
+}
+
+async function cloudDelete(id) {
+  if (!uid) return;
+  const ref = doc(db, "users", uid, "disciplinas", String(id));
+  await deleteDoc(ref);
+}
+
+function startCloudListener() {
+  if (!uid) return;
+
+  if (unsubscribeSnapshot) unsubscribeSnapshot();
+
+  const colRef = collection(db, "users", uid, "disciplinas");
+  unsubscribeSnapshot = onSnapshot(
+    colRef,
+    (snap) => {
+      disciplinas = snap.docs.map((d) => d.data()).sort(byId);
+      saveLocal(); // cache local
+      renderizar();
+    },
+    (err) => {
+      console.error("Firestore snapshot error:", err);
+      renderizar();
+    }
+  );
+}
+
+async function migrateLocalToCloudIfNeeded() {
+  if (!uid) return;
+
+  const colRef = collection(db, "users", uid, "disciplinas");
+  const snap = await getDocs(colRef);
+
+  const cloudCount = snap.size;
+  const local = loadLocal().sort(byId);
+
+  if (cloudCount === 0 && local.length > 0) {
+    for (const item of local) {
+      await cloudUpsert(item);
+    }
+  }
+}
+
+/* =============================
+   UI handlers (globais)
+============================= */
+window.loginGoogle = async function loginGoogle() {
+  try {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  } catch (e) {
+    console.error(e);
+    alert(
+      "Não consegui abrir o login do Google.\n\n" +
+        "Causas comuns:\n" +
+        "• Domínio não autorizado no Firebase (Authorized domains)\n" +
+        "• Bloqueio de pop-up no navegador\n\n" +
+        "Abra F12 → Console para ver o erro exato."
+    );
+  }
+};
+
+window.logoutGoogle = async function logoutGoogle() {
+  try {
+    await signOut(auth);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+window.adicionarDisciplina = async function adicionarDisciplina() {
+  const novaDisciplina = {
     id: Date.now(),
     nome: "",
     professor: "",
@@ -78,105 +197,95 @@ function novaDisciplinaVazia() {
     aulaAoVivo2: "",
     plantaoSemanal: ""
   };
-}
 
-async function persistDisciplina(disc) {
-  if (currentUser) {
-    await upsertDisciplina(currentUser.uid, disc);
+  if (uid) {
+    await cloudUpsert(novaDisciplina);
   } else {
+    disciplinas.push(novaDisciplina);
     saveLocal();
-  }
-}
-
-async function persistDelete(id) {
-  if (currentUser) {
-    await removeDisciplina(currentUser.uid, id);
-  } else {
-    saveLocal();
-  }
-}
-
-function adicionarDisciplina() {
-  const d = novaDisciplinaVazia();
-  disciplinas.unshift(d);
-  if (!currentUser) saveLocal();
-  renderizar();
-  if (currentUser) persistDisciplina(d);
-}
-
-function atualizarCampo(id, campo, valor) {
-  const idx = disciplinas.findIndex(d => d.id === id);
-  if (idx === -1) return;
-  disciplinas[idx][campo] = valor;
-
-  if (!currentUser) saveLocal();
-  renderizar();
-
-  persistDisciplina(disciplinas[idx]);
-}
-
-function deletarDisciplina(id) {
-  disciplinas = disciplinas.filter(d => d.id !== id);
-  if (!currentUser) saveLocal();
-  renderizar();
-  persistDelete(id);
-}
-
-async function limparTudo() {
-  if (!confirm("Tem certeza que deseja limpar todas as disciplinas?")) return;
-
-  if (currentUser) {
-    // remove item por item
-    const ids = disciplinas.map(d => d.id);
-    disciplinas = [];
     renderizar();
-    await Promise.all(ids.map(id => removeDisciplina(currentUser.uid, id)));
+  }
+};
+
+window.deletarDisciplina = async function deletarDisciplina(id) {
+  if (!confirm("Tem certeza que deseja deletar esta disciplina?")) return;
+
+  if (uid) {
+    await cloudDelete(id);
+  } else {
+    disciplinas = disciplinas.filter((d) => d.id !== id);
+    saveLocal();
+    renderizar();
+  }
+};
+
+window.atualizarCampo = async function atualizarCampo(id, campo, valor) {
+  const disciplina = disciplinas.find((d) => d.id === id);
+  if (!disciplina) return;
+
+  disciplina[campo] = valor;
+
+  if (uid) {
+    await cloudUpsert(disciplina);
+  } else {
+    saveLocal();
+    renderizar();
+  }
+};
+
+window.limparTudo = async function limparTudo() {
+  if (
+    !confirm(
+      "Tem certeza que deseja limpar TODAS as disciplinas?\nEsta ação não pode ser desfeita."
+    )
+  )
+    return;
+
+  if (uid) {
+    const ids = disciplinas.map((d) => d.id);
+    for (const id of ids) {
+      await cloudDelete(id);
+    }
   } else {
     disciplinas = [];
     saveLocal();
     renderizar();
   }
-}
+};
 
-// --------------------
-// Render
-// --------------------
-function escapeHtml(str) {
-  return String(str ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
+/* =============================
+   Renderização
+============================= */
 function renderizar() {
-  const grid = document.getElementById("disciplinasGrid");
+  const grid = $("#disciplinasGrid");
+  if (!grid) return;
 
-  if (!disciplinas.length) {
-    grid.innerHTML = '<p style="color: white; text-align: center; grid-column: 1/-1; font-weight: 800;">Nenhuma disciplina cadastrada. Clique em "Nova Disciplina" para começar.</p>';
+  if (!disciplinas || disciplinas.length === 0) {
+    grid.innerHTML =
+      '<p class="empty">Nenhuma disciplina cadastrada. Clique em “+ Nova Disciplina” para começar.</p>';
     return;
   }
 
-  grid.innerHTML = disciplinas.map(disc => {
-    const a1 = getAulaStatus(disc.aulaAoVivo1);
-    const a2 = getAulaStatus(disc.aulaAoVivo2);
+  grid.innerHTML = disciplinas
+    .sort(byId)
+    .map((disc) => {
+      const a1 = getAulaStatus(disc.aulaAoVivo1);
+      const a2 = getAulaStatus(disc.aulaAoVivo2);
 
-    return `
+      return `
       <div class="disciplina-card">
         <div class="card-header">
           <input
             type="text"
             placeholder="Nome da Disciplina"
-            value="${escapeHtml(disc.nome)}"
-            onchange="window.__atualizarCampo(${disc.id}, 'nome', this.value)"
-            style="font-weight: 900;"
+            value="${escapeHtml(disc.nome || "")}"
+            onchange="atualizarCampo(${disc.id}, 'nome', this.value)"
           />
           <input
             type="text"
             placeholder="Professor(a)"
-            value="${escapeHtml(disc.professor)}"
-            onchange="window.__atualizarCampo(${disc.id}, 'professor', this.value)"
+            value="${escapeHtml(disc.professor || "")}"
+            onchange="atualizarCampo(${disc.id}, 'professor', this.value)"
           />
         </div>
 
@@ -185,7 +294,7 @@ function renderizar() {
             <input
               type="checkbox"
               ${disc.videoBoasVindas ? "checked" : ""}
-              onchange="window.__atualizarCampo(${disc.id}, 'videoBoasVindas', this.checked)"
+              onchange="atualizarCampo(${disc.id}, 'videoBoasVindas', this.checked)"
             />
             <span class="item-label">Vídeo de boas-vindas</span>
           </label>
@@ -199,7 +308,7 @@ function renderizar() {
             <input
               type="checkbox"
               ${disc.planoEnsino ? "checked" : ""}
-              onchange="window.__atualizarCampo(${disc.id}, 'planoEnsino', this.checked)"
+              onchange="atualizarCampo(${disc.id}, 'planoEnsino', this.checked)"
             />
             <span class="item-label">Plano de ensino</span>
           </label>
@@ -212,8 +321,8 @@ function renderizar() {
           <span class="item-label">Aula ao vivo 1:</span>
           <input
             type="datetime-local"
-            value="${escapeHtml(disc.aulaAoVivo1)}"
-            onchange="window.__atualizarCampo(${disc.id}, 'aulaAoVivo1', this.value)"
+            value="${escapeHtml(disc.aulaAoVivo1 || "")}"
+            onchange="atualizarCampo(${disc.id}, 'aulaAoVivo1', this.value)"
           />
           ${a1.isSoon ? `<span class="badge-proxima ${a1.isToday ? "badge-hoje" : ""}">${a1.text}</span>` : ""}
         </div>
@@ -222,8 +331,8 @@ function renderizar() {
           <span class="item-label">Aula ao vivo 2:</span>
           <input
             type="datetime-local"
-            value="${escapeHtml(disc.aulaAoVivo2)}"
-            onchange="window.__atualizarCampo(${disc.id}, 'aulaAoVivo2', this.value)"
+            value="${escapeHtml(disc.aulaAoVivo2 || "")}"
+            onchange="atualizarCampo(${disc.id}, 'aulaAoVivo2', this.value)"
           />
           ${a2.isSoon ? `<span class="badge-proxima ${a2.isToday ? "badge-hoje" : ""}">${a2.text}</span>` : ""}
         </div>
@@ -233,102 +342,42 @@ function renderizar() {
           <input
             type="text"
             placeholder="Ex: Segunda às 14h"
-            value="${escapeHtml(disc.plantaoSemanal)}"
-            onchange="window.__atualizarCampo(${disc.id}, 'plantaoSemanal', this.value)"
+            value="${escapeHtml(disc.plantaoSemanal || "")}"
+            onchange="atualizarCampo(${disc.id}, 'plantaoSemanal', this.value)"
           />
         </div>
 
-        <button class="btn btn-delete delete-card" onclick="window.__deletarDisciplina(${disc.id})">
+        <button class="btn delete-card" onclick="deletarDisciplina(${disc.id})">
           🗑️ Deletar Disciplina
         </button>
-      </div>
-    `;
-  }).join("");
+      </div>`;
+    })
+    .join("");
 }
 
-// Expor handlers (porque o HTML gerado usa onclick/onchange)
-window.__atualizarCampo = atualizarCampo;
-window.__deletarDisciplina = deletarDisciplina;
-
-// --------------------
-// Auth / Sync
-// --------------------
-function showAuthButtons(isLogged) {
-  document.getElementById("btnLogin").style.display = isLogged ? "none" : "inline-flex";
-  document.getElementById("btnLogout").style.display = isLogged ? "inline-flex" : "none";
-}
-
-function startCloudWatch(user) {
-  if (unsubscribeCloud) unsubscribeCloud();
-  unsubscribeCloud = null;
-
-  if (!user) return;
-
-  unsubscribeCloud = watchDisciplinas(user.uid, (list) => {
-    disciplinas = list;
-    renderizar();
-  });
-}
-
-async function migrateLocalToCloudIfNeeded() {
-  if (!currentUser) return;
-  const local = loadLocal();
-  if (!local.length) return;
-
-  // Mescla: mantém a nuvem como fonte principal, mas sobe itens locais que ainda não existam
-  const cloudIds = new Set(disciplinas.map(d => d.id));
-  const toUpload = local.filter(d => !cloudIds.has(d.id));
-
-  if (toUpload.length) {
-    setStoreStatus("warn", "Sincronizando itens locais para a nuvem...");
-    await Promise.all(toUpload.map(d => upsertDisciplina(currentUser.uid, d)));
-  }
-
-  // limpa cache local depois de subir
-  localStorage.removeItem(LS_KEY);
-  setStoreStatus("ok", "Nuvem (Firestore) — sincronizado");
-}
-
-// --------------------
-// Boot
-// --------------------
-document.getElementById("btnNova").addEventListener("click", adicionarDisciplina);
-document.getElementById("btnLimpar").addEventListener("click", limparTudo);
-document.getElementById("btnLogin").addEventListener("click", async () => {
-  try {
-    setStoreStatus("warn", "Abrindo login...");
-    await loginWithGoogle();
-  } catch (e) {
-    console.error(e);
-    alert("Não foi possível logar. Verifique se o domínio está autorizado no Firebase Auth e se o popup não foi bloqueado.");
-    setStoreStatus("err", "Falha no login");
-  }
-});
-document.getElementById("btnLogout").addEventListener("click", async () => {
-  await logout();
-});
-
-// Carrega local imediatamente (melhor UX)
-disciplinas = loadLocal();
-renderizar();
-setStoreStatus("ok", "Local (navegador)");
-
-// Observa login
-watchUser(async (user) => {
-  currentUser = user;
-  showAuthButtons(!!user);
-
+/* =============================
+   Boot
+============================= */
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    setStoreStatus("warn", "Conectando à nuvem...");
-    startCloudWatch(user);
-    // aguarda um pouco o primeiro snapshot; migração acontece depois no próximo tick
-    setTimeout(() => migrateLocalToCloudIfNeeded().catch(console.error), 300);
+    uid = user.uid;
+    setAuthUI(true, user.email || "");
+    try {
+      await migrateLocalToCloudIfNeeded();
+    } catch (e) {
+      console.error("Migration error:", e);
+    }
+    startCloudListener();
   } else {
-    if (unsubscribeCloud) unsubscribeCloud();
-    unsubscribeCloud = null;
-
+    uid = null;
+    if (unsubscribeSnapshot) unsubscribeSnapshot();
+    unsubscribeSnapshot = null;
+    setAuthUI(false);
     disciplinas = loadLocal();
     renderizar();
-    setStoreStatus("ok", "Local (navegador)");
   }
 });
+
+// primeira render (offline/local)
+setAuthUI(false);
+renderizar();
