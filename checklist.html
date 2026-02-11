@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checklist de Disciplinas — EaD Pleno</title>
+  <title>Checklist de Disciplinas</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>📚 Checklist de Disciplinas — EaD Pleno</h1>
-    <div class="subheader">Controle interno de disciplinas tutoradas</div>
+    <h1>📚 Checklist de Disciplinas</h1>
+    <div class="subheader">EaD Pleno e EaD Presencial</div>
+
+    <div class="tabs" role="tablist" aria-label="Modalidade">
+      <button class="tab active" id="tabPleno" onclick="setTab('pleno')" role="tab" aria-selected="true">EaD Pleno</button>
+      <button class="tab" id="tabPresencial" onclick="setTab('presencial')" role="tab" aria-selected="false">EaD Presencial</button>
+    </div>
 
     <div class="controls">
       <div class="left">

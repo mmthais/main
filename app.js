@@ -20,31 +20,55 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
 /* =============================
-   Estado + utilidades
+   Estado
 ============================= */
-const LOCAL_KEY = "disciplinas_local_cache_v1";
-let disciplinas = loadLocal();
+const LOCAL_KEYS = {
+  pleno: "disciplinas_local_cache_pleno_v1",
+  presencial: "disciplinas_local_cache_presencial_v1"
+};
+
+let tabAtiva = "pleno";
 let uid = null;
-let unsubscribeSnapshot = null;
 
-function loadLocal() {
-  try {
-    return JSON.parse(localStorage.getItem(LOCAL_KEY)) || [];
-  } catch {
-    return [];
-  }
-}
+let disciplinasPleno = loadLocal("pleno");
+let disciplinasPresencial = loadLocal("presencial");
 
-function saveLocal() {
-  localStorage.setItem(LOCAL_KEY, JSON.stringify(disciplinas));
-}
+let unsubPleno = null;
+let unsubPresencial = null;
+
+/* =============================
+   Utils
+============================= */
+const $ = (sel) => document.querySelector(sel);
 
 function byId(a, b) {
   return (a.id || 0) - (b.id || 0);
 }
 
+function loadLocal(tab) {
+  try {
+    return JSON.parse(localStorage.getItem(LOCAL_KEYS[tab])) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocal(tab) {
+  const data = tab === "pleno" ? disciplinasPleno : disciplinasPresencial;
+  localStorage.setItem(LOCAL_KEYS[tab], JSON.stringify(data));
+}
+
+function escapeHtml(str) {
+  return String(str ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 /* =============================
-   Destaque Aula ao vivo (<=24h)
+   Destaque Aula ao vivo (apenas Pleno)
 ============================= */
 function parseDateTimeLocal(value) {
   if (!value) return null;
@@ -73,13 +97,26 @@ function getAulaStatus(value) {
 }
 
 /* =============================
-   Firebase (Auth + Firestore)
+   Firebase
 ============================= */
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const $ = (sel) => document.querySelector(sel);
+function colPath(tab) {
+  // duas coleções separadas (uma por aba)
+  return collection(db, "users", uid, tab === "pleno" ? "disciplinas_pleno" : "disciplinas_presencial");
+}
+
+async function cloudUpsert(tab, obj) {
+  const ref = doc(db, "users", uid, tab === "pleno" ? "disciplinas_pleno" : "disciplinas_presencial", String(obj.id));
+  await setDoc(ref, obj, { merge: false });
+}
+
+async function cloudDelete(tab, id) {
+  const ref = doc(db, "users", uid, tab === "pleno" ? "disciplinas_pleno" : "disciplinas_presencial", String(id));
+  await deleteDoc(ref);
+}
 
 function setAuthUI(isSignedIn, userEmail = "") {
   const pill = $("#authPill");
@@ -102,65 +139,66 @@ function setAuthUI(isSignedIn, userEmail = "") {
   }
 }
 
-function escapeHtml(str) {
-  return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-async function cloudUpsert(obj) {
-  if (!uid) return;
-  const ref = doc(db, "users", uid, "disciplinas", String(obj.id));
-  await setDoc(ref, obj, { merge: false });
-}
-
-async function cloudDelete(id) {
-  if (!uid) return;
-  const ref = doc(db, "users", uid, "disciplinas", String(id));
-  await deleteDoc(ref);
-}
-
-function startCloudListener() {
+function startCloudListeners() {
   if (!uid) return;
 
-  if (unsubscribeSnapshot) unsubscribeSnapshot();
+  if (unsubPleno) unsubPleno();
+  if (unsubPresencial) unsubPresencial();
 
-  const colRef = collection(db, "users", uid, "disciplinas");
-  unsubscribeSnapshot = onSnapshot(
-    colRef,
+  unsubPleno = onSnapshot(
+    colPath("pleno"),
     (snap) => {
-      disciplinas = snap.docs.map((d) => d.data()).sort(byId);
-      saveLocal(); // cache local
+      disciplinasPleno = snap.docs.map((d) => d.data()).sort(byId);
+      saveLocal("pleno");
       renderizar();
     },
-    (err) => {
-      console.error("Firestore snapshot error:", err);
+    (err) => console.error("Firestore pleno:", err)
+  );
+
+  unsubPresencial = onSnapshot(
+    colPath("presencial"),
+    (snap) => {
+      disciplinasPresencial = snap.docs.map((d) => d.data()).sort(byId);
+      saveLocal("presencial");
       renderizar();
-    }
+    },
+    (err) => console.error("Firestore presencial:", err)
   );
 }
 
-async function migrateLocalToCloudIfNeeded() {
-  if (!uid) return;
-
-  const colRef = collection(db, "users", uid, "disciplinas");
-  const snap = await getDocs(colRef);
-
+async function migrateLocalToCloudIfNeeded(tab) {
+  const snap = await getDocs(colPath(tab));
   const cloudCount = snap.size;
-  const local = loadLocal().sort(byId);
+  const local = loadLocal(tab).sort(byId);
 
   if (cloudCount === 0 && local.length > 0) {
     for (const item of local) {
-      await cloudUpsert(item);
+      await cloudUpsert(tab, item);
     }
   }
 }
 
 /* =============================
-   UI handlers (globais)
+   Abas
+============================= */
+window.setTab = function setTab(tab) {
+  tabAtiva = tab;
+
+  const tabPleno = $("#tabPleno");
+  const tabPresencial = $("#tabPresencial");
+
+  if (tabPleno && tabPresencial) {
+    tabPleno.classList.toggle("active", tabAtiva === "pleno");
+    tabPresencial.classList.toggle("active", tabAtiva === "presencial");
+    tabPleno.setAttribute("aria-selected", tabAtiva === "pleno" ? "true" : "false");
+    tabPresencial.setAttribute("aria-selected", tabAtiva === "presencial" ? "true" : "false");
+  }
+
+  renderizar();
+};
+
+/* =============================
+   UI (globais)
 ============================= */
 window.loginGoogle = async function loginGoogle() {
   try {
@@ -170,39 +208,49 @@ window.loginGoogle = async function loginGoogle() {
     console.error(e);
     alert(
       "Não consegui abrir o login do Google.\n\n" +
-        "Causas comuns:\n" +
-        "• Domínio não autorizado no Firebase (Authorized domains)\n" +
-        "• Bloqueio de pop-up no navegador\n\n" +
-        "Abra F12 → Console para ver o erro exato."
+      "Causas comuns:\n" +
+      "• Domínio não autorizado no Firebase (Authorized domains)\n" +
+      "• Pop-up bloqueado no navegador\n\n" +
+      "Abra F12 → Console para ver o erro exato."
     );
   }
 };
 
 window.logoutGoogle = async function logoutGoogle() {
-  try {
-    await signOut(auth);
-  } catch (e) {
-    console.error(e);
-  }
+  try { await signOut(auth); } catch (e) { console.error(e); }
 };
 
+function getListaAtual() {
+  return tabAtiva === "pleno" ? disciplinasPleno : disciplinasPresencial;
+}
+
+function setListaAtual(newArr) {
+  if (tabAtiva === "pleno") disciplinasPleno = newArr;
+  else disciplinasPresencial = newArr;
+}
+
 window.adicionarDisciplina = async function adicionarDisciplina() {
-  const novaDisciplina = {
+  const base = {
     id: Date.now(),
     nome: "",
     professor: "",
     videoBoasVindas: false,
     planoEnsino: false,
-    aulaAoVivo1: "",
-    aulaAoVivo2: "",
     plantaoSemanal: ""
   };
 
+  const nova =
+    tabAtiva === "pleno"
+      ? { ...base, aulaAoVivo1: "", aulaAoVivo2: "" }
+      : base; // presencial não tem aulas ao vivo
+
   if (uid) {
-    await cloudUpsert(novaDisciplina);
+    await cloudUpsert(tabAtiva, nova);
   } else {
-    disciplinas.push(novaDisciplina);
-    saveLocal();
+    const lista = getListaAtual();
+    lista.push(nova);
+    setListaAtual(lista);
+    saveLocal(tabAtiva);
     renderizar();
   }
 };
@@ -211,44 +259,41 @@ window.deletarDisciplina = async function deletarDisciplina(id) {
   if (!confirm("Tem certeza que deseja deletar esta disciplina?")) return;
 
   if (uid) {
-    await cloudDelete(id);
+    await cloudDelete(tabAtiva, id);
   } else {
-    disciplinas = disciplinas.filter((d) => d.id !== id);
-    saveLocal();
+    const lista = getListaAtual().filter((d) => d.id !== id);
+    setListaAtual(lista);
+    saveLocal(tabAtiva);
     renderizar();
   }
 };
 
 window.atualizarCampo = async function atualizarCampo(id, campo, valor) {
-  const disciplina = disciplinas.find((d) => d.id === id);
+  const lista = getListaAtual();
+  const disciplina = lista.find((d) => d.id === id);
   if (!disciplina) return;
 
   disciplina[campo] = valor;
 
   if (uid) {
-    await cloudUpsert(disciplina);
+    await cloudUpsert(tabAtiva, disciplina);
   } else {
-    saveLocal();
+    saveLocal(tabAtiva);
     renderizar();
   }
 };
 
 window.limparTudo = async function limparTudo() {
-  if (
-    !confirm(
-      "Tem certeza que deseja limpar TODAS as disciplinas?\nEsta ação não pode ser desfeita."
-    )
-  )
-    return;
+  if (!confirm("Tem certeza que deseja limpar TODAS as disciplinas desta aba?")) return;
 
   if (uid) {
-    const ids = disciplinas.map((d) => d.id);
-    for (const id of ids) {
-      await cloudDelete(id);
+    const lista = getListaAtual();
+    for (const item of lista) {
+      await cloudDelete(tabAtiva, item.id);
     }
   } else {
-    disciplinas = [];
-    saveLocal();
+    setListaAtual([]);
+    saveLocal(tabAtiva);
     renderizar();
   }
 };
@@ -260,42 +305,49 @@ function renderizar() {
   const grid = $("#disciplinasGrid");
   if (!grid) return;
 
-  if (!disciplinas || disciplinas.length === 0) {
+  const lista = getListaAtual().sort(byId);
+
+  if (!lista.length) {
     grid.innerHTML =
-      '<p class="empty">Nenhuma disciplina cadastrada. Clique em “+ Nova Disciplina” para começar.</p>';
+      '<p class="empty">Nenhuma disciplina cadastrada nesta aba. Clique em “+ Nova Disciplina” para começar.</p>';
     return;
   }
 
-  grid.innerHTML = disciplinas
-    .sort(byId)
-    .map((disc) => {
-      const a1 = getAulaStatus(disc.aulaAoVivo1);
-      const a2 = getAulaStatus(disc.aulaAoVivo2);
+  grid.innerHTML = lista.map((disc) => {
+    const a1 = tabAtiva === "pleno" ? getAulaStatus(disc.aulaAoVivo1) : null;
+    const a2 = tabAtiva === "pleno" ? getAulaStatus(disc.aulaAoVivo2) : null;
 
-      return `
+    const aulasAoVivoHtml = tabAtiva === "pleno" ? `
+      <div class="checklist-item ${a1?.isSoon ? "aula-proxima pulse" : ""}">
+        <span class="item-label">Aula ao vivo 1:</span>
+        <input type="datetime-local" value="${escapeHtml(disc.aulaAoVivo1 || "")}"
+          onchange="atualizarCampo(${disc.id}, 'aulaAoVivo1', this.value)" />
+        ${a1?.isSoon ? `<span class="badge-proxima ${a1.isToday ? "badge-hoje" : ""}">${a1.text}</span>` : ""}
+      </div>
+
+      <div class="checklist-item ${a2?.isSoon ? "aula-proxima pulse" : ""}">
+        <span class="item-label">Aula ao vivo 2:</span>
+        <input type="datetime-local" value="${escapeHtml(disc.aulaAoVivo2 || "")}"
+          onchange="atualizarCampo(${disc.id}, 'aulaAoVivo2', this.value)" />
+        ${a2?.isSoon ? `<span class="badge-proxima ${a2.isToday ? "badge-hoje" : ""}">${a2.text}</span>` : ""}
+      </div>
+    ` : "";
+
+    return `
       <div class="disciplina-card">
         <div class="card-header">
-          <input
-            type="text"
-            placeholder="Nome da Disciplina"
-            value="${escapeHtml(disc.nome || "")}"
-            onchange="atualizarCampo(${disc.id}, 'nome', this.value)"
-          />
-          <input
-            type="text"
-            placeholder="Professor(a)"
-            value="${escapeHtml(disc.professor || "")}"
-            onchange="atualizarCampo(${disc.id}, 'professor', this.value)"
-          />
+          <input type="text" placeholder="Nome da Disciplina"
+            value="${escapeHtml(disc.nome)}"
+            onchange="atualizarCampo(${disc.id}, 'nome', this.value)" />
+          <input type="text" placeholder="Professor(a)"
+            value="${escapeHtml(disc.professor)}"
+            onchange="atualizarCampo(${disc.id}, 'professor', this.value)" />
         </div>
 
         <div class="checklist-item">
           <label>
-            <input
-              type="checkbox"
-              ${disc.videoBoasVindas ? "checked" : ""}
-              onchange="atualizarCampo(${disc.id}, 'videoBoasVindas', this.checked)"
-            />
+            <input type="checkbox" ${disc.videoBoasVindas ? "checked" : ""}
+              onchange="atualizarCampo(${disc.id}, 'videoBoasVindas', this.checked)" />
             <span class="item-label">Vídeo de boas-vindas</span>
           </label>
           <span class="status-badge ${disc.videoBoasVindas ? "status-sim" : "status-nao"}">
@@ -305,11 +357,8 @@ function renderizar() {
 
         <div class="checklist-item">
           <label>
-            <input
-              type="checkbox"
-              ${disc.planoEnsino ? "checked" : ""}
-              onchange="atualizarCampo(${disc.id}, 'planoEnsino', this.checked)"
-            />
+            <input type="checkbox" ${disc.planoEnsino ? "checked" : ""}
+              onchange="atualizarCampo(${disc.id}, 'planoEnsino', this.checked)" />
             <span class="item-label">Plano de ensino</span>
           </label>
           <span class="status-badge ${disc.planoEnsino ? "status-sim" : "status-nao"}">
@@ -317,42 +366,19 @@ function renderizar() {
           </span>
         </div>
 
-        <div class="checklist-item ${a1.isSoon ? "aula-proxima pulse" : ""}">
-          <span class="item-label">Aula ao vivo 1:</span>
-          <input
-            type="datetime-local"
-            value="${escapeHtml(disc.aulaAoVivo1 || "")}"
-            onchange="atualizarCampo(${disc.id}, 'aulaAoVivo1', this.value)"
-          />
-          ${a1.isSoon ? `<span class="badge-proxima ${a1.isToday ? "badge-hoje" : ""}">${a1.text}</span>` : ""}
-        </div>
-
-        <div class="checklist-item ${a2.isSoon ? "aula-proxima pulse" : ""}">
-          <span class="item-label">Aula ao vivo 2:</span>
-          <input
-            type="datetime-local"
-            value="${escapeHtml(disc.aulaAoVivo2 || "")}"
-            onchange="atualizarCampo(${disc.id}, 'aulaAoVivo2', this.value)"
-          />
-          ${a2.isSoon ? `<span class="badge-proxima ${a2.isToday ? "badge-hoje" : ""}">${a2.text}</span>` : ""}
-        </div>
+        ${aulasAoVivoHtml}
 
         <div class="checklist-item">
           <span class="item-label">Plantão semanal:</span>
-          <input
-            type="text"
-            placeholder="Ex: Segunda às 14h"
-            value="${escapeHtml(disc.plantaoSemanal || "")}"
-            onchange="atualizarCampo(${disc.id}, 'plantaoSemanal', this.value)"
-          />
+          <input type="text" placeholder="Ex: Segunda às 14h"
+            value="${escapeHtml(disc.plantaoSemanal)}"
+            onchange="atualizarCampo(${disc.id}, 'plantaoSemanal', this.value)" />
         </div>
 
-        <button class="btn delete-card" onclick="deletarDisciplina(${disc.id})">
-          🗑️ Deletar Disciplina
-        </button>
-      </div>`;
-    })
-    .join("");
+        <button class="btn delete-card" onclick="deletarDisciplina(${disc.id})">🗑️ Deletar Disciplina</button>
+      </div>
+    `;
+  }).join("");
 }
 
 /* =============================
@@ -362,22 +388,29 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     uid = user.uid;
     setAuthUI(true, user.email || "");
+
     try {
-      await migrateLocalToCloudIfNeeded();
+      await migrateLocalToCloudIfNeeded("pleno");
+      await migrateLocalToCloudIfNeeded("presencial");
     } catch (e) {
-      console.error("Migration error:", e);
+      console.error("Migration:", e);
     }
-    startCloudListener();
+
+    startCloudListeners();
   } else {
     uid = null;
-    if (unsubscribeSnapshot) unsubscribeSnapshot();
-    unsubscribeSnapshot = null;
+    if (unsubPleno) unsubPleno();
+    if (unsubPresencial) unsubPresencial();
+    unsubPleno = unsubPresencial = null;
+
     setAuthUI(false);
-    disciplinas = loadLocal();
+
+    disciplinasPleno = loadLocal("pleno");
+    disciplinasPresencial = loadLocal("presencial");
     renderizar();
   }
 });
 
-// primeira render (offline/local)
+// primeira render
 setAuthUI(false);
 renderizar();
