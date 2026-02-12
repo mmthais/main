@@ -348,7 +348,7 @@ function renderizar() {
             value="${escapeHtml(disc.professor)}"
             onchange="atualizarCampo(${disc.id}, 'professor', this.value)" />
 
-          ${tabAtiva === 'presencial' ? `
+          ${tabAtiva === 'presencial' || tabAtiva === 'pleno' ? `
           <input type="text" placeholder="Carga horária (ex: 60h, 80 horas)"
             value="${escapeHtml(disc.cargaHoraria || '')}"
             onchange="atualizarCampo(${disc.id}, 'cargaHoraria', this.value)" />
@@ -396,7 +396,7 @@ function renderizar() {
             onchange="atualizarCampo(${disc.id}, 'plantaoSemanal', this.value)" />
         </div>
 
-        ${tabAtiva === 'presencial' ? `
+        ${tabAtiva === 'presencial' || tabAtiva === 'pleno' ? `
         <div class="checklist-item">
           <span class="item-label">Observação:</span>
           <textarea placeholder="Digite observações importantes..."
