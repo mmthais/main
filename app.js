@@ -236,7 +236,9 @@ window.adicionarDisciplina = async function adicionarDisciplina() {
     professor: "",
     videoBoasVindas: false,
     planoEnsino: false,
-    plantaoSemanal: ""
+    plantaoSemanal: "",
+    cargaHoraria: "",
+    observacao: ""
   };
 
   const nova =
@@ -345,6 +347,12 @@ function renderizar() {
           <input type="text" placeholder="Professor(a)"
             value="${escapeHtml(disc.professor)}"
             onchange="atualizarCampo(${disc.id}, 'professor', this.value)" />
+
+          ${tabAtiva === 'presencial' ? `
+          <input type="text" placeholder="Carga horária (ex: 60h, 80 horas)"
+            value="${escapeHtml(disc.cargaHoraria || '')}"
+            onchange="atualizarCampo(${disc.id}, 'cargaHoraria', this.value)" />
+          ` : ''}
         </div>
 
         <div class="checklist-item">
@@ -387,6 +395,14 @@ function renderizar() {
             value="${escapeHtml(disc.plantaoSemanal)}"
             onchange="atualizarCampo(${disc.id}, 'plantaoSemanal', this.value)" />
         </div>
+
+        ${tabAtiva === 'presencial' ? `
+        <div class="checklist-item">
+          <span class="item-label">Observação:</span>
+          <textarea placeholder="Digite observações importantes..."
+            onchange="atualizarCampo(${disc.id}, 'observacao', this.value)">${escapeHtml(disc.observacao || '')}</textarea>
+        </div>
+        ` : ''}
 
         <button class="btn delete-card" onclick="deletarDisciplina(${disc.id})">🗑️ Deletar Disciplina</button>
       </div>

@@ -281,3 +281,22 @@ h1{
 .segment button.no.active{
   background:#b91c1c;
 }
+
+
+/* ===== Observação ===== */
+.checklist-item textarea{
+  flex:1;
+  width:100%;
+  min-height:90px;
+  resize:vertical;
+  padding:10px;
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  font-size:13px;
+  outline:none;
+  background:#fff;
+}
+.checklist-item textarea:focus{
+  border-color:#1f4f85;
+  box-shadow:0 0 0 4px rgba(31,79,133,.14);
+}
