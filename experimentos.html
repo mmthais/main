@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experimentos</title>
+    <title>Experimentos de Código</title>
     <style>
         * {
             margin: 0;
@@ -97,7 +98,7 @@
             padding: 24px;
             border-radius: 6px;
         }
-        
+
         /* Calculadora */
         .calculator {
             max-width: 280px;
@@ -216,7 +217,7 @@
 <body>
     <div class="container">
         <a href="index.html" class="back-link">← Voltar</a>
-        
+
         <header>
             <h1>Experimentos de Código</h1>
             <p class="subtitle">Testes e pequenos projetos</p>
@@ -224,14 +225,20 @@
 
         <div class="grid">
 
-            
-        <!-- Checklist de Disciplinas -->
-<div class="lab-card">
-  <h3>📚 Checklist de Disciplinas</h3>
-  <p>Gestão de disciplinas EaD Pleno e Presencial com salvamento local ou em nuvem.</p>
-  <a href="./checklist.html" class="btn-lab">Acessar ferramenta</a>
-</div>
-            
+            <!-- Checklist de Disciplinas (link para mmthais.github.io/main/checklist.html) -->
+            <div class="card">
+                <h2>Checklist de Disciplinas</h2>
+                <span class="tag">Ferramenta</span>
+                <p>Organizador de disciplinas EaD Pleno e Presencial</p>
+                <div class="demo" style="text-align:center;">
+                    <button
+                        onclick="window.location.href='checklist.html'"
+                        style="padding:10px 18px; border:1px solid #2c3e50; background:white; color:#2c3e50; border-radius:6px; cursor:pointer; font-weight:500;">
+                        Acessar ferramenta
+                    </button>
+                </div>
+            </div>
+
             <!-- Calculadora -->
             <div class="card">
                 <h2>Calculadora</h2>
@@ -245,17 +252,17 @@
                             <button onclick="appendToDisplay('8')">8</button>
                             <button onclick="appendToDisplay('9')">9</button>
                             <button onclick="appendToDisplay('/')" class="operator">÷</button>
-                            
+
                             <button onclick="appendToDisplay('4')">4</button>
                             <button onclick="appendToDisplay('5')">5</button>
                             <button onclick="appendToDisplay('6')">6</button>
                             <button onclick="appendToDisplay('*')" class="operator">×</button>
-                            
+
                             <button onclick="appendToDisplay('1')">1</button>
                             <button onclick="appendToDisplay('2')">2</button>
                             <button onclick="appendToDisplay('3')">3</button>
                             <button onclick="appendToDisplay('-')" class="operator">-</button>
-                            
+
                             <button onclick="clearDisplay()" class="clear">C</button>
                             <button onclick="appendToDisplay('0')">0</button>
                             <button onclick="calculate()" class="equals">=</button>
@@ -264,7 +271,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Contador -->
             <div class="card">
                 <h2>Contador</h2>
@@ -279,9 +286,11 @@
                     <button onclick="resetarContador()" class="reset-btn">Resetar</button>
                 </div>
             </div>
+
         </div>
     </div>
-    
+
+    <script>
         // CALCULADORA
         let currentDisplay = '';
 
@@ -331,9 +340,5 @@
             atualizarDisplay();
         }
     </script>
-
-
-    
-</div>
 </body>
 </html>
