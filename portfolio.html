@@ -1,332 +1,579 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfólio - Tutoria EAD</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfólio - Tutoria EAD</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
-        }
+    body{
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: #f5f5f5;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+    .container{
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 30px;
-            color: #555;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
+    .back-link{
+      display: inline-block;
+      margin-bottom: 30px;
+      color: #555;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    .back-link:hover{ color:#2c3e50; }
 
-        .back-link:hover {
-            color: #2c3e50;
-        }
+    header{
+      text-align:center;
+      margin-bottom: 30px;
+      padding: 40px 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
 
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding: 40px 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
+    h1{
+      font-size: 2.2rem;
+      color:#2c3e50;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
 
-        h1 {
-            font-size: 2.2rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
+    .subtitle{
+      color:#666;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
 
-        .subtitle {
-            color: #666;
-            font-size: 1.1rem;
-        }
+    .headline{
+      color:#555;
+      font-size: 0.98rem;
+      max-width: 760px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
 
-        section {
-            background: white;
-            padding: 40px 30px;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
+    section{
+      background:#fff;
+      padding: 40px 30px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
 
-        h2 {
-            font-size: 1.6rem;
-            color: #2c3e50;
-            margin-bottom: 24px;
-            font-weight: 600;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #f0f0f0;
-        }
+    h2{
+      font-size: 1.6rem;
+      color:#2c3e50;
+      margin-bottom: 24px;
+      font-weight: 600;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
 
-        .sobre-text {
-            max-width: 700px;
-            margin: 0 auto;
-        }
+    .sobre-text{ max-width: 740px; margin: 0 auto; }
+    .sobre-text p{
+      margin-bottom: 16px;
+      color:#555;
+      line-height: 1.7;
+    }
 
-        .sobre-text p {
-            margin-bottom: 16px;
-            color: #555;
-            line-height: 1.7;
-        }
+    /* ====== Chips ====== */
+    .tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .tag{
+      background:#f0f0f0;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color:#555;
+      border: 1px solid #ececec;
+    }
 
-        .experiencia {
-            margin-bottom: 40px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #f0f0f0;
-        }
+    /* ====== Grid cards ====== */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
+    }
 
-        .experiencia:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
+    .card{
+      background:#fafafa;
+      border: 1px solid #f0f0f0;
+      border-radius: 8px;
+      padding: 18px;
+    }
 
-        .experiencia h3 {
-            font-size: 1.3rem;
-            color: #2c3e50;
-            margin-bottom: 8px;
-        }
+    .card h3{
+      font-size: 1.15rem;
+      color:#2c3e50;
+      margin-bottom: 6px;
+    }
 
-        .periodo {
-            color: #888;
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-            display: block;
-        }
+    .muted{ color:#777; font-size: 0.92rem; }
 
-        .experiencia p {
-            color: #555;
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 10px;
+      color:#777;
+      font-size: 0.9rem;
+    }
+    .meta span{
+      background:#fff;
+      border: 1px solid #eee;
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
 
-        .experiencia ul {
-            margin-left: 20px;
-            margin-bottom: 16px;
-        }
+    /* ====== Experiência ====== */
+    .experiencia{
+      margin-bottom: 34px;
+      padding-bottom: 26px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .experiencia:last-child{
+      border-bottom:none;
+      margin-bottom:0;
+      padding-bottom:0;
+    }
+    .experiencia h3{
+      font-size: 1.3rem;
+      color:#2c3e50;
+      margin-bottom: 6px;
+    }
+    .periodo{
+      color:#888;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      display:block;
+    }
+    .experiencia p{
+      color:#555;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .experiencia ul{ margin-left: 20px; margin-bottom: 10px; }
+    .experiencia li{
+      color:#555;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
 
-        .experiencia li {
-            color: #555;
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
+    /* ====== Destaques (KPIs) ====== */
+    .destaques-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .destaque{
+      text-align:center;
+      padding: 20px;
+      background:#fafafa;
+      border-radius: 8px;
+      border: 1px solid #f0f0f0;
+    }
+    .destaque-icon{ font-size: 1.8rem; margin-bottom: 10px; }
+    .destaque h4{
+      font-size: 1.05rem;
+      color:#2c3e50;
+      margin-bottom: 6px;
+    }
+    .destaque p{
+      color:#666;
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
 
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-        }
+    /* ====== Listas refinadas ====== */
+    .list{
+      list-style: none;
+      display:grid;
+      gap: 10px;
+    }
+    .list li{
+      padding: 12px 14px;
+      border: 1px solid #f0f0f0;
+      background: #fafafa;
+      border-radius: 8px;
+      color:#555;
+    }
+    .list li strong{ color:#2c3e50; }
 
-        .tag {
-            background: #f0f0f0;
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            color: #555;
-        }
+    /* ====== Links ====== */
+    .links{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .link-pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid #eee;
+      background:#fff;
+      color:#555;
+      text-decoration:none;
+      font-size: 0.95rem;
+      transition: transform .12s, box-shadow .12s, border-color .12s;
+    }
+    .link-pill:hover{
+      transform: translateY(-1px);
+      border-color:#e3e3e3;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+      color:#2c3e50;
+    }
 
-        .destaques-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
+    /* ====== Contato ====== */
+    .contato-info{
+      display:flex;
+      justify-content:center;
+      gap: 18px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .contato-item{
+      color:#555;
+      text-decoration:none;
+      transition: color .3s;
+    }
+    .contato-item:hover{ color:#2c3e50; }
 
-        .destaque {
-            text-align: center;
-            padding: 24px;
-            background: #fafafa;
-            border-radius: 6px;
-        }
-
-        .destaque-icon {
-            font-size: 2rem;
-            margin-bottom: 12px;
-        }
-
-        .destaque h4 {
-            font-size: 1.1rem;
-            color: #2c3e50;
-            margin-bottom: 8px;
-        }
-
-        .destaque p {
-            color: #666;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-
-        .habilidades-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
-        }
-
-        .habilidade-categoria h3 {
-            font-size: 1.2rem;
-            color: #2c3e50;
-            margin-bottom: 16px;
-            font-weight: 600;
-        }
-
-        .habilidade-categoria ul {
-            list-style: none;
-        }
-
-        .habilidade-categoria li {
-            padding: 10px 0;
-            color: #555;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .habilidade-categoria li:last-child {
-            border-bottom: none;
-        }
-
-        .contato-info {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-
-        .contato-item {
-            color: #555;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .contato-item:hover {
-            color: #2c3e50;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            section {
-                padding: 30px 20px;
-            }
-        }
-    </style>
+    @media (max-width: 768px){
+      h1{ font-size: 1.8rem; }
+      h2{ font-size: 1.4rem; }
+      section{ padding: 30px 20px; }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <a href="index.html" class="back-link">← Voltar</a>
-        
-        <header>
-            <h1>Thaís Miranda Martins</h1>
-            <p class="subtitle">Soluções e abordagens tecnológicas para Educação a Distância</p>
-        </header>
+  <div class="container">
+    <a href="index.html" class="back-link">← Voltar</a>
 
-        <section>
-            <h2>Sobre Mim</h2>
-            <div class="sobre-text">
-                <p>Sou uma profissional da educação com formação em História e TI que se dedica à educação a distância. Somo cerca de dez anos de experiência na área, entre estágio e trabalho efetivo. Atualmente, rabalho na Universidade Católica de Santos. Meu trabalho é o de facilitar o aprendizado e proporcionar suporte educacional de qualidade em ambientes virtuais.</p>
-                <p>Minha missão é conceber soluções facilitadoras para o processo de ensino-aprendizagem utilizando a tencologia, tornando o processo de aprendizagem mais acessível, engajador e eficaz.</p>
-            </div>
-        </section>
+    <header>
+      <h1>Thaís Miranda Martins</h1>
+      <p class="subtitle">Educação Digital • Tutoria EAD • Soluções tecnológicas aplicadas ao ensino</p>
+      <p class="headline">
+        <!-- EDITAR -->
+        Profissional com formação em História e TI, atuando na Educação a Distância com foco em mediação pedagógica,
+        suporte acadêmico e desenvolvimento de soluções práticas (templates, checklists, automações leves e organização de fluxos)
+        para qualificar a experiência de docentes e estudantes em ambientes virtuais.
+      </p>
 
-        <section>
-            <h2>Experiências profissionais </h2>
-            
-            <div class="experiencia">
-                <h3>Tutoria técnico-administrativa - Universidade Católica de Santos</h3>
-                <span class="periodo">[07/2019 - Atual]</span>
-                <p>Atividades:</p>
-                <ul>
-                    <li>Mediação de fóruns de discussão e atividades colaborativas online</li>
-                    <li>Acompanhamento individualizado do progresso dos alunos</li>
-                    <li>Elaboração de materiais didáticos complementares</li>
-                    <li>Realização de atendimentos síncronos via videoconferência</li>
-                    <li>Feedback personalizado em atividades e avaliações</li>
-                </ul>
-                <div class="tags">
-                    <span class="tag">Moodle</span>
-                    <span class="tag">Plataforma A (Gaia)</span>
-                </div>
-            </div>
-         
-                <div class="destaque">
-                    <div class="destaque-icon">👥</div>
-                    <h4>Atendimento Personalizado</h4>
-                    <p>Acompanhamento de mais de 1000 alunos</p>
-                </div>
-                <div class="destaque">
-                    <div class="destaque-icon">💡</div>
-                    <h4>Inovação Pedagógica</h4>
-                    <p>Desenvolvimento de estratégias criativas</p>
-                </div>
-            </div>
-        </section>
+      <div class="links" style="justify-content:center;">
+        <!-- EDITAR -->
+        <a class="link-pill" href="http://lattes.cnpq.br/6380147074198594" target="_blank" rel="noopener">📄 Lattes</a>
+        <a class="link-pill" href="https://www.linkedin.com/in/tha%C3%ADs-martins-939006351/" target="_blank" rel="noopener">💼 LinkedIn</a>
+        <a class="link-pill" href="https://github.com/mmthais" target="_blank" rel="noopener">💻 GitHub</a>
+        <a class="link-pill" href="mailto:thsmmrtns@gmail.com">✉️ E-mail</a>
+      </div>
+    </header>
 
-        <section>
-            <h2>Habilidades e Competências</h2>
-            <div class="habilidades-grid">
-                <div class="habilidade-categoria">
-                    <h3>📚 Pedagógicas</h3>
-                    <ul>
-                        <li>Metodologias Ativas</li>
-                        <li>Tutoria Online</li>
-                        <li>Design Instrucional</li>
-                        <li>Avaliação da Aprendizagem</li>
-                        <li>Feedback Construtivo</li>
-                    </ul>
-                </div>
-                <div class="habilidade-categoria">
-                    <h3>💻 Tecnológicas</h3>
-                    <ul>
-                        <li>Plataformas LMS</li>
-                        <li>Ferramentas de Videoconferência</li>
-                        <li>Google Workspace</li>
-                        <li>Ferramentas de Gamificação</li>
-                        <li>Edição de vídeos</li>
-                    </ul>
-                </div>
-                <div class="habilidade-categoria">
-                    <h3>🤝 Interpessoais</h3>
-                    <ul>
-                        <li>Comunicação Clara e assertiva</li>
-                        <li>Gestão de Conflitos</li>
-                        <li>Trabalho em Equipe</li>
-                        <li>Criatividade</li>
-                        <li>Proatividade</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <section>
+      <h2>Sobre Mim</h2>
+      <div class="sobre-text">
+        <!-- EDITAR -->
+        <p>
+          Sou uma profissional da educação com formação em História e TI dedicada à Educação a Distância.
+          Atuo há cerca de dez anos na área, entre estágio e trabalho efetivo. Atualmente, trabalho na Universidade Católica de Santos,
+          com foco em facilitar o aprendizado e proporcionar suporte educacional de qualidade em ambientes virtuais.
+        </p>
+        <p>
+          Minha missão é conceber soluções facilitadoras para o processo de ensino-aprendizagem utilizando tecnologia,
+          tornando a experiência de aprendizagem mais acessível, engajadora e eficaz — com organização, clareza e eficiência operacional.
+        </p>
 
-        <section>
-            <h2>Contato</h2>
-            <div class="contato-info">
-                <a href="mailto:thsmmrtns@gmail.com" class="contato-item">📧 thsmmrtns@gmail.com</a>
-                <a href="https://www.linkedin.com/in/tha%C3%ADs-martins-939006351/" target="_blank" class="contato-item">💼 LinkedIn</a>
-                <a href="https://github.com/mmthais" target="_blank" class="contato-item">💻 GitHub</a>
-            </div>
-        </section>
-    </div>
+        <div class="tags">
+          <!-- EDITAR -->
+          <span class="tag">Moodle</span>
+          <span class="tag">Educação Digital</span>
+          <span class="tag">Tutoria Online</span>
+          <span class="tag">Design Instrucional</span>
+          <span class="tag">Organização de processos</span>
+          <span class="tag">Tecnologia aplicada à educação</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Indicadores de Impacto</h2>
+      <div class="destaques-grid">
+        <!-- EDITAR -->
+        <div class="destaque">
+          <div class="destaque-icon">👥</div>
+          <h4>Atendimento e suporte</h4>
+          <p>Acompanhamento de <strong>+1000 alunos</strong> em rotinas acadêmicas e ambientes virtuais</p>
+        </div>
+
+        <div class="destaque">
+          <div class="destaque-icon">🧩</div>
+          <h4>Organização e processos</h4>
+          <p>Padronização de fluxos, checklists e materiais para reduzir retrabalho e ruído de comunicação</p>
+        </div>
+
+        <div class="destaque">
+          <div class="destaque-icon">💡</div>
+          <h4>Inovação pedagógica</h4>
+          <p>Estratégias criativas para engajamento, acompanhamento e feedback em AVA</p>
+        </div>
+
+        <div class="destaque">
+          <div class="destaque-icon">⚙️</div>
+          <h4>Soluções tecnológicas</h4>
+          <p>Templates e recursos (HTML/CSS/JS) para apoiar docentes e melhorar a experiência em LMS</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Formação Acadêmica</h2>
+      <div class="grid">
+        <!-- EDITAR -->
+        <div class="card">
+          <h3>História</h3>
+          <p class="muted">Instituição • Cidade/UF</p>
+          <div class="meta">
+            <span>Período: 20XX – 20XX</span>
+            <span>Ênfase: Educação / Cultura / (opcional)</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Tecnologia da Informação</h3>
+          <p class="muted">Instituição • Cidade/UF</p>
+          <div class="meta">
+            <span>Período: 20XX – 20XX</span>
+            <span>Ênfase: Web / Sistemas / (opcional)</span>
+          </div>
+        </div>
+      </div>
+
+      <ul class="list" style="margin-top:18px;">
+        <!-- EDITAR (opcional) -->
+        <li><strong>Linhas de interesse:</strong> Educação a distância, mediação pedagógica, design instrucional, acessibilidade, organização acadêmica e tecnologia educacional.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Experiências Profissionais</h2>
+
+      <div class="experiencia">
+        <h3>Tutoria técnico-administrativa — Universidade Católica de Santos</h3>
+        <span class="periodo">07/2019 — Atual</span>
+
+        <p><!-- EDITAR -->
+          Atuação em rotinas acadêmicas e suporte em Educação a Distância, com foco em mediação, acompanhamento discente,
+          organização de fluxos e apoio à docência em ambientes virtuais.
+        </p>
+
+        <ul>
+          <!-- EDITAR -->
+          <li>Mediação de fóruns de discussão e atividades colaborativas online</li>
+          <li>Acompanhamento do progresso dos alunos e intervenções orientadas a permanência/engajamento</li>
+          <li>Elaboração e padronização de materiais de apoio e orientações (guias, checklists e templates)</li>
+          <li>Atendimentos síncronos via videoconferência e comunicação estruturada com docentes/discentes</li>
+          <li>Feedback personalizado em atividades e avaliações</li>
+        </ul>
+
+        <div class="tags">
+          <!-- EDITAR -->
+          <span class="tag">Moodle</span>
+          <span class="tag">LMS</span>
+          <span class="tag">Mediação</span>
+          <span class="tag">Comunicação</span>
+          <span class="tag">Processos</span>
+        </div>
+      </div>
+
+      <!-- Se você tiver outras experiências, duplique o bloco .experiencia -->
+    </section>
+
+    <section>
+      <h2>Projetos e Soluções Desenvolvidas</h2>
+      <div class="grid">
+
+        <!-- EDITAR: Projeto 1 -->
+        <div class="card">
+          <h3>Checklist de Disciplinas (EaD)</h3>
+          <p class="muted">
+            Ferramenta para organizar entrega/pendências por disciplina, com salvamento local e opção de nuvem.
+          </p>
+          <div class="tags">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Firebase</span>
+          </div>
+          <div class="meta">
+            <span>Tipo: Produto interno / utilitário</span>
+            <span>Status: Em evolução</span>
+          </div>
+          <div class="links" style="margin-top:12px;">
+            <!-- EDITAR: links reais -->
+            <a class="link-pill" href="https://mmthais.github.io/main/checklist.html" target="_blank" rel="noopener">🔗 Abrir</a>
+            <a class="link-pill" href="https://github.com/mmthais" target="_blank" rel="noopener">📁 Repositório</a>
+          </div>
+        </div>
+
+        <!-- EDITAR: Projeto 2 -->
+        <div class="card">
+          <h3>Templates HTML responsivos para Moodle</h3>
+          <p class="muted">
+            Componentes visuais e contêineres responsivos para organização de sala, comunicação e melhor experiência em AVA.
+          </p>
+          <div class="tags">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">UX</span>
+            <span class="tag">Moodle</span>
+          </div>
+          <div class="meta">
+            <span>Foco: clareza, padronização e acessibilidade</span>
+          </div>
+          <div class="links" style="margin-top:12px;">
+            <!-- EDITAR -->
+            <a class="link-pill" href="https://mmthais.github.io/main/" target="_blank" rel="noopener">🔗 Ver página</a>
+          </div>
+        </div>
+
+        <!-- EDITAR: Projeto 3 (opcional) -->
+        <div class="card">
+          <h3>Projeto/Experimento (título)</h3>
+          <p class="muted">
+            <!-- EDITAR -->
+            Descreva o problema, a solução e o impacto em 1–2 linhas.
+          </p>
+          <div class="tags">
+            <span class="tag">Tecnologia</span>
+            <span class="tag">Educação</span>
+            <span class="tag">Processos</span>
+          </div>
+          <div class="links" style="margin-top:12px;">
+            <!-- EDITAR -->
+            <a class="link-pill" href="#" target="_blank" rel="noopener">🔗 Link</a>
+          </div>
+        </div>
+
+      </div>
+
+      <ul class="list" style="margin-top:18px;">
+        <!-- EDITAR (opcional) -->
+        <li><strong>Como eu trabalho:</strong> diagnóstico do contexto → estruturação do fluxo → protótipo simples → validação → refinamento e documentação.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Produção Acadêmica e Atuação Intelectual</h2>
+      <ul class="list">
+        <!-- EDITAR: coloque itens do Lattes (mesmo que poucos, mas bem escritos) -->
+        <li>
+          <strong>Artigo/Trabalho:</strong> Título do trabalho • Evento/Periódico, Ano.
+          <span class="muted"> (link/DOI opcional)</span>
+        </li>
+        <li>
+          <strong>Resumo/Evento:</strong> Título • Congresso/Simpósio, Ano.
+        </li>
+        <li>
+          <strong>Projeto/Grupo:</strong> Nome do grupo ou projeto • Instituição • Função (membro/colaboradora), Ano.
+        </li>
+      </ul>
+
+      <div class="links">
+        <a class="link-pill" href="http://lattes.cnpq.br/6380147074198594" target="_blank" rel="noopener">📄 Ver no Lattes</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Habilidades e Competências</h2>
+      <div class="grid">
+
+        <div class="card">
+          <h3>📚 Pedagógicas</h3>
+          <ul class="list" style="margin-top:12px;">
+            <!-- EDITAR -->
+            <li>Metodologias ativas e acompanhamento de aprendizagem</li>
+            <li>Mediação pedagógica em fóruns e atividades colaborativas</li>
+            <li>Feedback formativo e orientação acadêmica</li>
+            <li>Design instrucional (apoio a estrutura e clareza de materiais)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>💻 Tecnológicas</h3>
+          <ul class="list" style="margin-top:12px;">
+            <!-- EDITAR -->
+            <li>LMS: Moodle (configuração, organização e boas práticas)</li>
+            <li>Web: HTML/CSS/JavaScript (templates, componentes e protótipos)</li>
+            <li>Ferramentas: Google Workspace, videoconferência, H5P</li>
+            <li>Versionamento e publicação: Git/GitHub Pages</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>🤝 Interpessoais</h3>
+          <ul class="list" style="margin-top:12px;">
+            <!-- EDITAR -->
+            <li>Comunicação clara e assertiva</li>
+            <li>Gestão de conflitos e mediação</li>
+            <li>Organização e visão sistêmica de processos</li>
+            <li>Proatividade e colaboração com equipes docentes</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <h2>Certificações e Cursos Complementares</h2>
+      <ul class="list">
+        <!-- EDITAR -->
+        <li><strong>Curso/Certificação:</strong> Nome • Instituição • Ano • (Carga horária opcional)</li>
+        <li><strong>Curso/Certificação:</strong> Nome • Instituição • Ano</li>
+        <li><strong>Formação continuada:</strong> Tema • Instituição • Ano</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Áreas de Interesse</h2>
+      <div class="tags">
+        <!-- EDITAR -->
+        <span class="tag">Educação a Distância</span>
+        <span class="tag">Educação Digital</span>
+        <span class="tag">Mediação pedagógica</span>
+        <span class="tag">Design Instrucional</span>
+        <span class="tag">Acessibilidade</span>
+        <span class="tag">Experiência do estudante</span>
+        <span class="tag">Processos e padronização</span>
+        <span class="tag">Tecnologia aplicada ao ensino</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Contato</h2>
+      <div class="contato-info">
+        <a href="mailto:thsmmrtns@gmail.com" class="contato-item">📧 thsmmrtns@gmail.com</a>
+        <a href="https://www.linkedin.com/in/tha%C3%ADs-martins-939006351/" target="_blank" rel="noopener" class="contato-item">💼 LinkedIn</a>
+        <a href="https://github.com/mmthais" target="_blank" rel="noopener" class="contato-item">💻 GitHub</a>
+        <a href="http://lattes.cnpq.br/6380147074198594" target="_blank" rel="noopener" class="contato-item">📄 Lattes</a>
+      </div>
+    </section>
+
+  </div>
 </body>
 </html>
-
