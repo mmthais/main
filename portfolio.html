@@ -91,7 +91,7 @@
       margin-top: 12px;
     }
     .tag{
-      background:#f0f0f0;,
+      background:#f0f0f0; /* <- corrigido (sem vírgula) */
       padding: 6px 14px;
       border-radius: 999px;
       font-size: 0.85rem;
@@ -105,6 +105,7 @@
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 18px;
       margin-top: 18px;
+      align-items: stretch; /* <- garante linhas “esticadas” */
     }
 
     .card{
@@ -112,6 +113,12 @@
       border: 1px solid #f0f0f0;
       border-radius: 8px;
       padding: 18px;
+
+      /* <- padronização de altura por linha e layout interno */
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
     }
 
     .card h3{
@@ -136,6 +143,10 @@
       padding: 6px 10px;
       border-radius: 999px;
     }
+
+    /* Faz os botões irem pro “rodapé” do card quando existir conteúdo variável */
+    .card .links{ margin-top: auto; }
+    .card .links + *{ margin-top: 12px; }
 
     /* ====== Experiência ====== */
     .experiencia{
@@ -177,6 +188,7 @@
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
       margin-top: 18px;
+      align-items: stretch;
     }
     .destaque{
       text-align:center;
@@ -184,6 +196,11 @@
       background:#fafafa;
       border-radius: 8px;
       border: 1px solid #f0f0f0;
+
+      height: 100%;
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .destaque-icon{ font-size: 1.8rem; margin-bottom: 10px; }
     .destaque h4{
@@ -231,6 +248,7 @@
       text-decoration:none;
       font-size: 0.95rem;
       transition: transform .12s, box-shadow .12s, border-color .12s;
+      white-space: nowrap;
     }
     .link-pill:hover{
       transform: translateY(-1px);
@@ -269,12 +287,9 @@
     <header>
       <h1>Thaís Miranda Martins</h1>
       <p class="subtitle">Educação a Distância • Tutoria • Metodologias Ativas • Soluções tecnológicas aplicadas à Educação</p>
-      <p class="headline">
-       
-      </p>
+      <p class="headline"></p>
 
       <div class="links" style="justify-content:center;">
-        <!-- EDITAR -->
         <a class="link-pill" href="http://lattes.cnpq.br/6380147074198594" target="_blank" rel="noopener">📄 Lattes</a>
         <a class="link-pill" href="https://linkedin.com/in/mmthais" target="_blank" rel="noopener">💼 LinkedIn</a>
         <a class="link-pill" href="https://github.com/mmthais" target="_blank" rel="noopener">💻 GitHub</a>
@@ -285,7 +300,6 @@
     <section>
       <h2>Sobre Mim</h2>
       <div class="sobre-text">
-        <!-- EDITAR -->
         <p>
           Profissional da educação com formação em História e TI dedicada à Educação a Distância. Com atuação na área há cerca de dez anos, mesclando s em suporte técnico e tutoria. Atualmente, componho o corpo de tutores da Universidade Católica de Santos, trabalhando em soluções para auxiliar o aprendizado e proporcionar suporte educacional de qualidade em ambientes virtuais.
         </p>
@@ -295,7 +309,6 @@
         </p>
 
         <div class="tags">
-          <!-- EDITAR -->
           <span class="tag">Moodle</span>
           <span class="tag">Educação Digital</span>
           <span class="tag">Tutoria Online</span>
@@ -309,7 +322,6 @@
     <section>
       <h2>Indicadores de Impacto</h2>
       <div class="destaques-grid">
-        <!-- EDITAR -->
         <div class="destaque">
           <div class="destaque-icon">👥</div>
           <h4>Atendimento e suporte</h4>
@@ -339,8 +351,6 @@
     <section>
       <h2>Formação Acadêmica</h2>
       <div class="grid">
-        <!-- EDITAR -->
-        
         <div class="card">
           <h3>Técnico em Redes de Computadores</h3>
           <p class="muted">SENAI • Santos/SP</p>
@@ -349,8 +359,7 @@
             <span>Ênfase: Administração de Redes / Infraestrutura de Redes / Estrutura de Dados / Projetos</span>
           </div>
         </div>
-        
-        
+
         <div class="card">
           <h3>Licenciatura em História</h3>
           <p class="muted">Universidade Católica de Santos • Santos/SP</p>
@@ -362,7 +371,7 @@
 
         <div class="card">
           <h3>Tecnologia em Análise e Desenvolvimento de Sistemas</h3>
-          <p class="muted">niversidade Católica de Santos • Santos/SP</p>
+          <p class="muted">Universidade Católica de Santos • Santos/SP</p>
           <div class="meta">
             <span>Período: 2025 – 2027</span>
             <span>Ênfase: Programação / FullStack / Sistemas de Computadores</span>
@@ -371,58 +380,53 @@
       </div>
 
       <ul class="list" style="margin-top:18px;">
-        <!-- EDITAR (opcional) -->
         <li><strong>Linhas de interesse:</strong> Educação a distância, mediação pedagógica, design instrucional, acessibilidade, organização acadêmica e tecnologia educacional.</li>
       </ul>
     </section>
 
+    <!-- ✅ EXPERIÊNCIAS (corrigido: sem sections quebradas) -->
     <section>
-     <h2>Experiências Profissionais</h2>
+      <h2>Experiências Profissionais</h2>
+
       <div class="experiencia">
-        <h3>Tutoria técnico-administrativa — Universidade Católica de Santos</h3>
+        <h3>Tutoria técnico-administrativa • Universidade Católica de Santos</h3>
         <span class="periodo">07/2019 — Atual</span>
 
-        <p><!-- EDITAR -->
+        <p>
           Atuação em rotinas acadêmicas e suporte em Educação a Distância, com foco em mediação, acompanhamento discente,
           organização de fluxos e apoio à docência em ambientes virtuais.
         </p>
 
         <ul>
-          <!-- EDITAR -->
           <li>Mediação de fóruns de discussão e atividades colaborativas online</li>
           <li>Acompanhamento do progresso dos alunos e intervenções orientadas a permanência/engajamento</li>
           <li>Padronização de materiais de apoio e orientações (templates, materiais pedagógicos, etc.)</li>
           <li>Atendimentos síncronos e comunicação estruturada com docentes/discentes via ferramentas de mensagem</li>
           <li>Atendimento personalizado mediante a demanda do estudante</li>
         </ul>
-    </section>
-         <div class="tags">
-          <!-- EDITAR -->
+
+        <div class="tags">
           <span class="tag">Moodle</span>
           <span class="tag">LMS</span>
           <span class="tag">Configuração</span>
           <span class="tag">Suporte técnico</span>
           <span class="tag">Mediação</span>
         </div>
-        <section>
+      </div>
+
       <div class="experiencia">
-        <h3>Suporte ao estudante - Universidade Metropolitana de Santos (UNIMES)</h3>
+        <h3>Suporte ao estudante • Universidade Metropolitana de Santos (UNIMES)</h3>
         <span class="periodo">10/2015 — 10/2017</span>
 
-        <p><!-- EDITAR -->
-          Suporte ao estudante dos cursos oferecidos em EaD pela instituição.
-        </p>
+        <p>Suporte ao estudante dos cursos oferecidos em EaD pela instituição.</p>
 
         <ul>
-          <!-- EDITAR -->
-          <li>Atedimento via e-mail institucional e telefone</li>
+          <li>Atendimento via e-mail institucional e telefone</li>
           <li>Direcionamento aos setores competentes, quando necessário</li>
           <li>Configurações no Moodle para casos excepcionais</li>
         </ul>
-            </section>
-    
+
         <div class="tags">
-          <!-- EDITAR -->
           <span class="tag">Moodle</span>
           <span class="tag">LMS</span>
           <span class="tag">Suporte Técnico</span>
@@ -430,74 +434,61 @@
           <span class="tag">Escalonamento</span>
         </div>
       </div>
-
-      <!-- Se você tiver outras experiências, duplique o bloco .experiencia -->
     </section>
 
+    <!-- ✅ PROJETOS (corrigido: removido trecho solto que quebrava grid) -->
     <section>
       <h2>Projetos e Soluções Desenvolvidas</h2>
-      <div class="grid">
 
-        <!-- EDITAR: Projeto 1 -->
+      <div class="grid">
         <div class="card">
           <h3>Checklist de Disciplinas (EaD)</h3>
           <p class="muted">
             Ferramenta para organizar entrega/pendências por disciplina, com salvamento local e opção de nuvem.
           </p>
+
           <div class="tags">
             <span class="tag">HTML</span>
             <span class="tag">CSS</span>
             <span class="tag">JavaScript</span>
             <span class="tag">Firebase</span>
           </div>
+
           <div class="meta">
             <span>Tipo: Produto interno / utilitário</span>
             <span>Status: Em evolução</span>
           </div>
+
           <div class="links" style="margin-top:12px;">
-            <!-- EDITAR: links reais -->
             <a class="link-pill" href="https://mmthais.github.io/main/checklist.html" target="_blank" rel="noopener">🔗 Abrir</a>
             <a class="link-pill" href="https://github.com/mmthais" target="_blank" rel="noopener">📁 Repositório</a>
           </div>
         </div>
 
-        <!-- EDITAR: Projeto 2 -->
         <div class="card">
           <h3>Templates HTML responsivos para Moodle</h3>
           <p class="muted">
             Componentes visuais e contêineres responsivos para organização de sala, comunicação e melhor experiência em AVA.
           </p>
+
           <div class="tags">
             <span class="tag">HTML</span>
             <span class="tag">CSS</span>
             <span class="tag">UX</span>
             <span class="tag">Moodle</span>
           </div>
+
           <div class="meta">
             <span>Foco: clareza, padronização e acessibilidade</span>
           </div>
+
           <div class="links" style="margin-top:12px;">
-            <!-- EDITAR -->
             <a class="link-pill" href="https://mmthais.github.io/main/" target="_blank" rel="noopener">🔗 Ver página</a>
           </div>
         </div>
-
-      
-          <div class="tags">
-            <span class="tag">Tecnologia</span>
-            <span class="tag">Educação</span>
-            <span class="tag">Processos</span>
-          </div>
-          <div class="links" style="margin-top:12px;">
-            <!-- EDITAR -->
-            <a class="link-pill" href="#" target="_blank" rel="noopener">🔗 Link</a>
-          </div>
-        </div>
-
       </div>
 
       <ul class="list" style="margin-top:18px;">
-        <!-- EDITAR (opcional) -->
         <li><strong>Como eu trabalho:</strong> diagnóstico do contexto → estruturação do fluxo → protótipo simples → validação → refinamento e documentação.</li>
       </ul>
     </section>
@@ -505,7 +496,6 @@
     <section>
       <h2>Produção Acadêmica e Atuação Intelectual</h2>
       <ul class="list">
-        <!-- EDITAR: coloque itens do Lattes (mesmo que poucos, mas bem escritos) -->
         <li>
           <strong>Artigo/Trabalho:</strong> Em construção.
           <span class="muted"> (link/DOI opcional)</span>
@@ -526,11 +516,9 @@
     <section>
       <h2>Habilidades e Competências</h2>
       <div class="grid">
-
         <div class="card">
           <h3>📚 Pedagógicas</h3>
           <ul class="list" style="margin-top:12px;">
-            <!-- EDITAR -->
             <li>Metodologias ativas e acompanhamento de aprendizagem</li>
             <li>Mediação pedagógica em fóruns e atividades colaborativas</li>
             <li>Feedback formativo e orientação acadêmica</li>
@@ -541,7 +529,6 @@
         <div class="card">
           <h3>💻 Tecnológicas</h3>
           <ul class="list" style="margin-top:12px;">
-            <!-- EDITAR -->
             <li>LMS: Moodle (configuração, organização e boas práticas)</li>
             <li>Web: HTML/CSS/JavaScript (templates, componentes e protótipos)</li>
             <li>Ferramentas: Google Workspace, videoconferência, H5P</li>
@@ -552,22 +539,18 @@
         <div class="card">
           <h3>🤝 Interpessoais</h3>
           <ul class="list" style="margin-top:12px;">
-            <!-- EDITAR -->
             <li>Comunicação clara e assertiva</li>
             <li>Gestão de conflitos e mediação</li>
             <li>Organização e visão sistêmica de processos</li>
             <li>Proatividade e colaboração com equipes docentes</li>
           </ul>
         </div>
-
       </div>
     </section>
 
     <section>
       <h2>Certificações e Cursos Complementares</h2>
       <ul class="list">
-        <!-- EDITAR -->
-    
         <li><strong>Formação continuada:</strong> Moodle para Educadores • IFES • 2025</li>
       </ul>
     </section>
@@ -575,7 +558,6 @@
     <section>
       <h2>Áreas de Interesse</h2>
       <div class="tags">
-        <!-- EDITAR -->
         <span class="tag">Educação a Distância</span>
         <span class="tag">Educação Digital</span>
         <span class="tag">Mediação pedagógica</span>
