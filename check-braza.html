@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brazaesthetic — Agenda de Lançamento</title>
+  <style>
+    :root {
+      --navy: #1F3861;
+      --navy-2: #2e4a78;
+      --paper: #f5f2ee;
+      --ink: #1e2430;
+      --muted: #667085;
+      --line: #d9dde5;
+      --card: #ffffff;
+      --ok: #1f7a4d;
+      --shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(31, 56, 97, 0.08), transparent 28%),
+        linear-gradient(180deg, #f8f7f4 0%, #f0ece6 100%);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+      color: #fff;
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 820px;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 18px 0 0;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font: inherit;
+      cursor: pointer;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    .btn-light {
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.22);
+      backdrop-filter: blur(6px);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.9);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.72rem;
+    }
+
+    .stat strong {
+      font-size: 1.9rem;
+      letter-spacing: -0.04em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .week {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .week-head {
+      padding: 18px 20px;
+      background: linear-gradient(180deg, rgba(31,56,97,0.07) 0%, rgba(31,56,97,0.02) 100%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .week-head span {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--navy);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+
+    .week-head h2 {
+      margin: 0 0 6px;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .week-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .tasks {
+      padding: 12px 16px 4px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .task {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid #e7ebf1;
+      border-radius: 14px;
+      background: #fcfcfd;
+    }
+
+    .task input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--navy);
+      cursor: pointer;
+    }
+
+    .task label {
+      cursor: pointer;
+      line-height: 1.45;
+    }
+
+    .task.done {
+      background: #f5fbf7;
+      border-color: #cfe8d8;
+    }
+
+    .task.done label {
+      color: #3f5d4a;
+      text-decoration: line-through;
+      opacity: 0.8;
+    }
+
+    .note {
+      margin-top: auto;
+      padding: 16px;
+      border-top: 1px dashed var(--line);
+      background: #fbfbfc;
+    }
+
+    .note h3 {
+      margin: 0 0 8px;
+      font-size: 0.96rem;
+      color: var(--navy);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .footer-note {
+      margin-top: 22px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+      .stats, .grid { grid-template-columns: 1fr; }
+      .wrap { padding: 16px; }
+      .hero { padding: 22px; border-radius: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Agenda de lançamento brazaesthetic</h1>
+      <p>
+      
+      </p>
+      <div class="toolbar">
+        <button class="btn-light" id="resetChecks">Limpar checklists</button>
+        <button class="btn-light" id="resetNotes">Limpar observações</button>
+        <button class="btn-light" id="resetAll">Resetar tudo</button>
+      </div>
+    </section>
+
+    <section class="stats">
+      <article class="stat">
+        <small>Tarefas totais</small>
+        <strong id="totalTasks">0</strong>
+      </article>
+      <article class="stat">
+        <small>Concluídas</small>
+        <strong id="doneTasks">0</strong>
+      </article>
+      <article class="stat">
+        <small>Progresso</small>
+        <strong id="progressPct">0%</strong>
+      </article>
+      <article class="stat">
+        <small>Deadline</small>
+        <strong>21/03</strong>
+      </article>
+    </section>
+
+    <section class="grid" id="weeksGrid"></section>
+
+    <p class="footer-note">Brazaesthetic — planner editorial, técnico e de redes.</p>
+  </div>
+
+  <script>
+    const weeks = [
+      {
+        id: 'semana1',
+        label: 'Semana 1 · 10–12/03',
+        title: 'Estrutura e decisão editorial',
+        description: 'Consolidar base técnica, mobile e definir a arquitetura dos ensaios.',
+        tasks: [
+          'Implementar melhor o layout para versão mobile da home',
+          'Revisar menu, grids, cards e leitura em telas pequenas',
+          'Garantir imagens responsivas e espaçamentos consistentes',
+          'Decidir se os ensaios saem no Substack ou no próprio site',
+          'Definir estrutura final da página de ensaio',
+          'Revisar tipografia de leitura longa e navegação geral'
+        ]
+      },
+      {
+        id: 'semana2',
+        label: 'Semana 2 · 13–17/03',
+        title: 'Conteúdo e preparação silenciosa',
+        description: 'Produzir pelo menos mais um ensaio e publicar uma versão de teste sem divulgação.',
+        tasks: [
+          'Escolher tema do novo ensaio',
+          'Levantar referências visuais, prints, imagens e links',
+          'Escrever a primeira versão do texto',
+          'Revisar argumento, intertítulos e ritmo de leitura',
+          'Inserir o ensaio no site',
+          'Fazer publicação silenciosa para testar navegação e visualização mobile'
+        ]
+      },
+      {
+        id: 'semana3',
+        label: 'Semana 3 · 18–20/03',
+        title: 'Redes sociais e revisão final',
+        description: 'Preparar comunicação mínima de lançamento, sem dispersar energia.',
+        tasks: [
+          'Preparar post de “aguarde” para Twitter/X',
+          'Escrever o post fixado do Twitter/X para o lançamento',
+          'Preparar post inicial do Instagram com identidade congruente ao site',
+          'Definir legenda do primeiro post sobre ensaio',
+          'Revisar links, favicon, rodapé e páginas institucionais',
+          'Fazer última bateria de testes no mobile'
+        ]
+      },
+      {
+        id: 'semana4',
+        label: 'Semana 4 · 21/03',
+        title: 'Dia do lançamento',
+        description: 'Virar a chave, publicar e registrar o início da presença pública do projeto.',
+        tasks: [
+          'Publicar oficialmente o site',
+          'Postar anúncio no Twitter/X',
+          'Fixar o post principal com explicação do projeto',
+          'Publicar o primeiro post no Instagram',
+          'Atualizar o Tumblr com layout/post congruente com a homepage',
+          'Compartilhar o link com contatos e rede próxima'
+        ]
+      }
+    ];
+
+    const weeksGrid = document.getElementById('weeksGrid');
+    const totalTasksEl = document.getElementById('totalTasks');
+    const doneTasksEl = document.getElementById('doneTasks');
+    const progressPctEl = document.getElementById('progressPct');
+
+    function keyForTask(weekId, index) {
+      return `brazaesthetic_${weekId}_task_${index}`;
+    }
+
+    function keyForNote(weekId) {
+      return `brazaesthetic_${weekId}_note`;
+    }
+
+    function render() {
+      weeksGrid.innerHTML = '';
+
+      weeks.forEach((week) => {
+        const article = document.createElement('article');
+        article.className = 'week';
+
+        const doneCount = week.tasks.filter((_, index) => localStorage.getItem(keyForTask(week.id, index)) === 'true').length;
+
+        article.innerHTML = `
+          <div class="week-head">
+            <span>${week.label}</span>
+            <h2>${week.title}</h2>
+            <p>${week.description}</p>
+          </div>
+          <div class="tasks">
+            ${week.tasks.map((task, index) => {
+              const checked = localStorage.getItem(keyForTask(week.id, index)) === 'true';
+              return `
+                <div class="task ${checked ? 'done' : ''}">
+                  <input type="checkbox" id="${week.id}_${index}" data-week="${week.id}" data-index="${index}" ${checked ? 'checked' : ''}>
+                  <label for="${week.id}_${index}">${task}</label>
+                </div>
+              `;
+            }).join('')}
+          </div>
+          <div class="note">
+            <h3>Observações da semana</h3>
+            <textarea id="note_${week.id}" placeholder="Anote ajustes, pendências, decisões editoriais, ideias de copy, bugs encontrados...">${localStorage.getItem(keyForNote(week.id)) || ''}</textarea>
+          </div>
+        `;
+
+        weeksGrid.appendChild(article);
+      });
+
+      bindEvents();
+      updateStats();
+    }
+
+    function bindEvents() {
+      document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.addEventListener('change', (event) => {
+          const { week, index } = event.target.dataset;
+          localStorage.setItem(keyForTask(week, index), event.target.checked ? 'true' : 'false');
+          render();
+        });
+      });
+
+      document.querySelectorAll('textarea').forEach((textarea) => {
+        textarea.addEventListener('input', (event) => {
+          const weekId = event.target.id.replace('note_', '');
+          localStorage.setItem(keyForNote(weekId), event.target.value);
+        });
+      });
+    }
+
+    function updateStats() {
+      const totalTasks = weeks.reduce((sum, week) => sum + week.tasks.length, 0);
+      const doneTasks = weeks.reduce((sum, week) => {
+        return sum + week.tasks.filter((_, index) => localStorage.getItem(keyForTask(week.id, index)) === 'true').length;
+      }, 0);
+      const progress = totalTasks ? Math.round((doneTasks / totalTasks) * 100) : 0;
+
+      totalTasksEl.textContent = totalTasks;
+      doneTasksEl.textContent = doneTasks;
+      progressPctEl.textContent = `${progress}%`;
+    }
+
+    document.getElementById('resetChecks').addEventListener('click', () => {
+      weeks.forEach((week) => week.tasks.forEach((_, index) => localStorage.removeItem(keyForTask(week.id, index))));
+      render();
+    });
+
+    document.getElementById('resetNotes').addEventListener('click', () => {
+      weeks.forEach((week) => localStorage.removeItem(keyForNote(week.id)));
+      render();
+    });
+
+    document.getElementById('resetAll').addEventListener('click', () => {
+      weeks.forEach((week) => {
+        week.tasks.forEach((_, index) => localStorage.removeItem(keyForTask(week.id, index)));
+        localStorage.removeItem(keyForNote(week.id));
+      });
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
