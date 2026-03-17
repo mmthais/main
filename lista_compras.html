@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista de Compras</title>
+  <style>
+    :root {
+      --bg: #f4f1ec;
+      --card: #fffdf9;
+      --text: #2f2a26;
+      --muted: #7a716a;
+      --line: #ddd4cc;
+      --accent: #3a3a3a;
+      --accent-soft: #e5e5e5;
+      --ok: #2e7d32;
+      --danger: #a94442;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Helvetica, Arial, sans-serif;
+      background: linear-gradient(180deg, #f7f4ef 0%, #f1ece6 100%);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    .hero {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: var(--accent);
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .topbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .button {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 15px;
+      font: inherit;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .button.secondary {
+      background: #ece7e0;
+      color: var(--text);
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      opacity: 0.96;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      min-height: 280px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .section h2 {
+      margin: 0;
+      font-size: 1.15rem;
+      color: var(--accent);
+    }
+
+    .meta {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .progress-wrap {
+      margin: 8px 0 14px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #ede6de;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent) 0%, #6b6b6b 100%);
+      transition: width 0.25s ease;
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .item-label {
+      flex: 1;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .item.done .item-label {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .delete-btn {
+      border: 0;
+      background: transparent;
+      color: var(--danger);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 8px;
+    }
+
+    .delete-btn:hover {
+      background: #f8eceb;
+    }
+
+    .add-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .add-row input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .add-row input:focus {
+      outline: 2px solid var(--accent-soft);
+      border-color: var(--accent);
+    }
+
+    .footer-note {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .wrap {
+        padding: 18px 12px 36px;
+      }
+
+      .hero, .section {
+        border-radius: 18px;
+      }
+
+      .add-row {
+        grid-template-columns: 1fr;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Lista de compras</h1>
+      <p>Checklist por sessão, com progresso automático, inclusão de novos itens, exclusão e salvamento local no navegador.</p>
+      <div class="topbar">
+        <button class="button secondary" id="resetBtn" type="button">Restaurar lista básica</button>
+        <button class="button primary" id="clearChecksBtn" type="button">Desmarcar tudo</button>
+      </div>
+    </section>
+
+    <main class="grid" id="sectionsContainer"></main>
+
+    <p class="footer-note">As alterações ficam salvas localmente neste navegador com <strong>localStorage</strong>.</p>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'listaComprasCasa_v1';
+
+    const baseData = [
+      {
+        id: 'padaria',
+        title: 'Padaria',
+        items: [
+          { text: 'Pão francês', checked: false },
+          { text: 'Pão de forma', checked: false },
+          { text: 'Bolo simples', checked: false },
+          { text: 'Torradas', checked: false }
+        ]
+      },
+      {
+        id: 'frios',
+        title: 'Frios',
+        items: [
+          { text: 'Queijo mussarela', checked: false },
+          { text: 'Presunto', checked: false },
+          { text: 'Requeijão', checked: false },
+          { text: 'Iogurte', checked: false }
+        ]
+      },
+      {
+        id: 'congelados',
+        title: 'Congelados',
+        items: [
+          { text: 'Legumes congelados', checked: false },
+          { text: 'Hambúrguer', checked: false },
+          { text: 'Batata frita congelada', checked: false },
+          { text: 'Polpa de fruta', checked: false }
+        ]
+      },
+      {
+        id: 'acougue',
+        title: 'Açougue',
+        items: [
+          { text: 'Peito de frango', checked: false },
+          { text: 'Carne moída', checked: false },
+          { text: 'Bife', checked: false },
+          { text: 'Linguiça', checked: false }
+        ]
+      },
+      {
+        id: 'graos',
+        title: 'Grãos e secos',
+        items: [
+          { text: 'Arroz', checked: false },
+          { text: 'Feijão', checked: false },
+          { text: 'Farinha de trigo', checked: false },
+          { text: 'Macarrão', checked: false },
+          { text: 'Açúcar', checked: false },
+          { text: 'Café', checked: false }
+        ]
+      },
+      {
+        id: 'hortifruti',
+        title: 'Hortifruti',
+        items: [
+          { text: 'Alface', checked: false },
+          { text: 'Tomate', checked: false },
+          { text: 'Cebola', checked: false },
+          { text: 'Banana', checked: false },
+          { text: 'Maçã', checked: false },
+          { text: 'Batata', checked: false }
+        ]
+      },
+      {
+        id: 'laticinios',
+        title: 'Laticínios',
+        items: [
+          { text: 'Leite', checked: false },
+          { text: 'Manteiga', checked: false },
+          { text: 'Creme de leite', checked: false },
+          { text: 'Leite condensado', checked: false }
+        ]
+      },
+      {
+        id: 'limpeza',
+        title: 'Limpeza',
+        items: [
+          { text: 'Detergente', checked: false },
+          { text: 'Sabão em pó', checked: false },
+          { text: 'Desinfetante', checked: false },
+          { text: 'Papel toalha', checked: false }
+        ]
+      },
+      {
+        id: 'higiene',
+        title: 'Higiene',
+        items: [
+          { text: 'Papel higiênico', checked: false },
+          { text: 'Sabonete', checked: false },
+          { text: 'Shampoo', checked: false },
+          { text: 'Creme dental', checked: false }
+        ]
+      }
+    ];
+
+    function cloneBaseData() {
+      return JSON.parse(JSON.stringify(baseData));
+    }
+
+    function loadData() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return cloneBaseData();
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return cloneBaseData();
+      }
+    }
+
+    let sections = loadData();
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sections));
+    }
+
+    function calcProgress(items) {
+      if (!items.length) return 0;
+      const done = items.filter(item => item.checked).length;
+      return Math.round((done / items.length) * 100);
+    }
+
+    function render() {
+      const container = document.getElementById('sectionsContainer');
+      container.innerHTML = '';
+
+      sections.forEach((section, sectionIndex) => {
+        const progress = calcProgress(section.items);
+        const doneCount = section.items.filter(item => item.checked).length;
+
+        const sectionEl = document.createElement('section');
+        sectionEl.className = 'section';
+
+        sectionEl.innerHTML = `
+          <div class="section-head">
+            <div>
+              <h2>${section.title}</h2>
+              <div class="meta">${doneCount} de ${section.items.length} itens marcados</div>
+            </div>
+            <div class="meta">${progress}%</div>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-bar" aria-hidden="true">
+              <div class="progress-fill" style="width: ${progress}%;"></div>
+            </div>
+          </div>
+
+          <ul class="list">
+            ${section.items.map((item, itemIndex) => `
+              <li class="item ${item.checked ? 'done' : ''}">
+                <input
+                  type="checkbox"
+                  ${item.checked ? 'checked' : ''}
+                  onchange="toggleItem(${sectionIndex}, ${itemIndex})"
+                  aria-label="Marcar ${item.text}"
+                />
+                <span class="item-label">${escapeHtml(item.text)}</span>
+                <button class="delete-btn" type="button" onclick="deleteItem(${sectionIndex}, ${itemIndex})" aria-label="Excluir ${item.text}">✕</button>
+              </li>
+            `).join('')}
+          </ul>
+
+          <div class="add-row">
+            <input type="text" id="input-${section.id}" placeholder="Adicionar item em ${section.title.toLowerCase()}" />
+            <button class="button primary" type="button" onclick="addItem(${sectionIndex}, 'input-${section.id}')">Adicionar</button>
+          </div>
+        `;
+
+        container.appendChild(sectionEl);
+      });
+
+      bindEnterKey();
+      saveData();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function toggleItem(sectionIndex, itemIndex) {
+      sections[sectionIndex].items[itemIndex].checked = !sections[sectionIndex].items[itemIndex].checked;
+      render();
+    }
+
+    function addItem(sectionIndex, inputId) {
+      const input = document.getElementById(inputId);
+      const value = input.value.trim();
+      if (!value) return;
+
+      sections[sectionIndex].items.push({ text: value, checked: false });
+      input.value = '';
+      render();
+    }
+
+    function deleteItem(sectionIndex, itemIndex) {
+      sections[sectionIndex].items.splice(itemIndex, 1);
+      render();
+    }
+
+    function bindEnterKey() {
+      document.querySelectorAll('.add-row input').forEach(input => {
+        input.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter') {
+            const btn = input.parentElement.querySelector('button');
+            btn.click();
+          }
+        });
+      });
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      sections = cloneBaseData();
+      render();
+    });
+
+    document.getElementById('clearChecksBtn').addEventListener('click', () => {
+      sections = sections.map(section => ({
+        ...section,
+        items: section.items.map(item => ({ ...item, checked: false }))
+      }));
+      render();
+    });
+
+    render();
+
+    window.toggleItem = toggleItem;
+    window.addItem = addItem;
+    window.deleteItem = deleteItem;
+  </script>
+</body>
+</html>
