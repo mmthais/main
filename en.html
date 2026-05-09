@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Thaís Martins: educação, tecnologia, EaD, design instrucional e projetos digitais.">
+  <meta name="description" content="Thaís Martins: education, technology, e-learning, instructional design, and digital projects.">
   <title>Thaís Martins</title>
   <style>
     :root {
@@ -596,6 +596,15 @@
         min-height: 58px;
       }
 
+      .content-header,
+      .item {
+        grid-template-columns: 1fr;
+      }
+
+      .close-button {
+        justify-self: start;
+      }
+
       .project {
         grid-template-columns: 58px minmax(0, 1fr);
         gap: 10px 14px;
@@ -612,15 +621,6 @@
         height: 46px;
       }
 
-      .content-header,
-      .item {
-        grid-template-columns: 1fr;
-      }
-
-      .close-button {
-        justify-self: start;
-      }
-
       .pill {
         white-space: normal;
       }
@@ -628,8 +628,8 @@
   </style>
 </head>
 <body>
-  <nav class="language-switch" aria-label="Selecionar idioma">
-    <a class="language-option" href="index.html" data-language-choice="pt" aria-label="Versão em português" aria-current="page">
+  <nav class="language-switch" aria-label="Select language">
+    <a class="language-option" href="index.html" data-language-choice="pt" aria-label="Ver versão em português">
       <svg viewBox="0 0 36 24" aria-hidden="true">
         <rect width="36" height="24" rx="1.2" fill="#009b3a" />
         <path fill="#ffdf00" d="M18 4 32 12 18 20 4 12 18 4Z" />
@@ -637,7 +637,7 @@
         <path fill="#fff" d="M13 11.1c3.7-1 7.3-.6 10.4 1.4-.1.5-.2.9-.4 1.3-3-1.9-6.3-2.4-9.8-1.4-.1-.4-.2-.8-.2-1.3Z" />
       </svg>
     </a>
-    <a class="language-option" href="en.html" data-language-choice="en" aria-label="View English version">
+    <a class="language-option" href="en.html" data-language-choice="en" aria-label="English version" aria-current="page">
       <svg viewBox="0 0 36 24" aria-hidden="true">
         <rect width="36" height="24" rx="1.2" fill="#b22234" />
         <path fill="#fff" d="M0 3h36v3H0V3Zm0 6h36v3H0V9Zm0 6h36v3H0v-3Zm0 6h36v3H0v-3Z" />
@@ -651,9 +651,9 @@
       <section class="intro" aria-labelledby="hero-title">
         <h1 id="hero-title">Thaís Martins</h1>
         <p class="intro-text">
-          Educação, tecnologia e processos acadêmicos integrados, com foco em
-          Ambientes Virtuais de Aprendizagem (AVA), suporte ao estudante e
-          soluções digitais para rotinas educacionais.
+          Education, technology, and integrated academic processes, with a
+          focus on e-learning environments, student support, and digital
+          solutions for educational workflows.
         </p>
       </section>
 
@@ -663,7 +663,7 @@
             <path d="M24 9a8 8 0 1 1 0 16 8 8 0 0 1 0-16Z" />
             <path d="M10 40c3.4-8 8.1-12 14-12s10.6 4 14 12" />
           </svg>
-          <span class="hint">Sobre</span>
+          <span class="hint">About</span>
         </button>
 
         <button class="section-card" type="button" data-section="formacao">
@@ -672,7 +672,7 @@
             <path d="M14 23v9c5 5 15 5 20 0v-9" />
             <path d="M40 20v12" />
           </svg>
-          <span class="hint">Formação</span>
+          <span class="hint">Education</span>
         </button>
 
         <button class="section-card" type="button" data-section="experiencia">
@@ -683,7 +683,7 @@
             <path d="M21 25h6v5h-6v-5Z" />
             <path d="M14 34h8M30 34h4" />
           </svg>
-          <span class="hint">Experiência profissional</span>
+          <span class="hint">Professional experience</span>
         </button>
 
         <button class="section-card" type="button" data-section="habilidades">
@@ -691,7 +691,7 @@
             <path d="M12 12h10v10H12V12ZM26 12h10v10H26V12ZM12 26h10v10H12V26ZM26 26h10v10H26V26Z" />
             <path d="M17 22v4M31 22v4M22 17h4M22 31h4" />
           </svg>
-          <span class="hint">Habilidades</span>
+          <span class="hint">Skills</span>
         </button>
 
         <button class="section-card" type="button" data-section="projetos">
@@ -701,7 +701,7 @@
             <path d="M16 31h16" />
             <path d="M18 35c4-2 7 2 11 0" />
           </svg>
-          <span class="hint">Projetos</span>
+          <span class="hint">Projects</span>
         </button>
 
         <button class="section-card" type="button" data-section="contato">
@@ -710,7 +710,7 @@
             <path d="m10 16 14 11 14-11" />
             <path d="M16 38h16" />
           </svg>
-          <span class="hint">Contato</span>
+          <span class="hint">Contact</span>
         </button>
       </section>
     </main>
@@ -727,49 +727,49 @@
     </section>
 
     <footer class="footer">
-      <p>2026 © Todos os direitos reservados.</p>
+      <p>2026 © All rights reserved.</p>
     </footer>
   </div>
 
   <template id="template-sobre">
     <p class="lead">
-      Desde o início da minha vida profissional, estive entre a educação e a
-      tecnologia. Comecei acompanhando ambientes de aprendizagem, rotinas de
-      laboratório e plataformas digitais, e essa aproximação tornou quase
-      inevitável a construção de uma trajetória entre esses dois campos.
+      Since the beginning of my professional life, I have found myself between
+      education and technology. I started by supporting learning environments,
+      lab routines, and digital platforms, and this proximity made a path between
+      these two fields feel almost inevitable.
     </p>
     <p class="lead">
-      Hoje, uno meu interesse pela docência ao pensamento sobre o labor do
-      profissional da Educação a Distância: mediação pedagógica, suporte ao
-      estudante, organização de processos e criação de soluções digitais que
-      tornem o trabalho educacional mais claro, acompanhável e humano.
+      Today, I bring my interest in teaching into the work of thinking about the
+      role of e-learning professionals: pedagogical mediation, student support,
+      process organization, and digital solutions that make educational work
+      clearer, easier to follow, and more human.
     </p>
-    <div class="cluster" aria-label="Competências principais">
+    <div class="cluster" aria-label="Core skills">
       <span class="pill">Moodle</span>
-      <span class="pill">Tutoria online</span>
-      <span class="pill">Mediação pedagógica</span>
-      <span class="pill">Design instrucional</span>
+      <span class="pill">E-learning tutoring</span>
+      <span class="pill">Pedagogical mediation</span>
+      <span class="pill">Instructional design</span>
       <span class="pill">HTML/CSS/JavaScript</span>
-      <span class="pill">Processos acadêmicos</span>
-      <span class="pill">Suporte ao estudante</span>
-      <span class="pill">Educação digital</span>
+      <span class="pill">Academic processes</span>
+      <span class="pill">Student support</span>
+      <span class="pill">Digital education</span>
     </div>
-    <div class="metrics" aria-label="Indicadores profissionais">
+    <div class="metrics" aria-label="Professional highlights">
       <div class="metric">
         <strong>10+</strong>
-        <span>anos de atuação entre suporte educacional, tutoria e tecnologia aplicada.</span>
+        <span>years working across educational support, tutoring, and applied technology.</span>
       </div>
       <div class="metric">
         <strong>1000+</strong>
-        <span>estudantes acompanhados em rotinas acadêmicas e ambientes virtuais.</span>
+        <span>students supported in academic routines and virtual learning environments.</span>
       </div>
       <div class="metric">
         <strong>3</strong>
-        <span>frentes de formação: licenciatura, design instrucional e análise de sistemas.</span>
+        <span>education tracks: teaching degree, instructional design, and systems analysis.</span>
       </div>
       <div class="metric">
-        <strong>AVA</strong>
-        <span>experiência prática com Moodle, LMS, materiais e comunicação educacional.</span>
+        <strong>LMS</strong>
+        <span>hands-on experience with Moodle, learning materials, and educational communication.</span>
       </div>
     </div>
   </template>
@@ -777,35 +777,35 @@
   <template id="template-formacao">
     <div class="timeline">
       <article class="item">
-        <p class="period">2026 - atual</p>
+        <p class="period">2026 - present</p>
         <div>
-          <h3>Lato sensu em Design Instrucional</h3>
-          <p>Universidade Federal de Itajubá (UNIFEI). Especialização em andamento com foco no planejamento, desenvolvimento e avaliação de experiências de aprendizagem.</p>
-          <span class="status progress">Em andamento</span>
+          <h3>Graduate Certificate in Instructional Design</h3>
+          <p>Federal University of Itajubá (UNIFEI). In progress, focused on planning, developing, and evaluating learning experiences.</p>
+          <span class="status progress">In progress</span>
         </div>
       </article>
       <article class="item">
-        <p class="period">2025 - atual</p>
+        <p class="period">2025 - present</p>
         <div>
-          <h3>Tecnologia em Análise e Desenvolvimento de Sistemas</h3>
-          <p>Universidade Católica de Santos. Formação em andamento voltada a programação, desenvolvimento web, sistemas computacionais e construção de soluções digitais.</p>
-          <span class="status progress">Em andamento</span>
+          <h3>Associate Degree in Systems Analysis and Development</h3>
+          <p>Catholic University of Santos. In progress, focused on programming, web development, computer systems, and digital solutions.</p>
+          <span class="status progress">In progress</span>
         </div>
       </article>
       <article class="item">
         <p class="period">2015 - 2019</p>
         <div>
-          <h3>Licenciatura em História</h3>
-          <p>Universidade Católica de Santos. Formação pedagógica e humanística, com base em didática, políticas educacionais, história e cultura.</p>
-          <span class="status">Finalizada</span>
+          <h3>Teaching Degree in History</h3>
+          <p>Catholic University of Santos. Pedagogical and humanities-based education, with emphasis on didactics, educational policies, history, and culture.</p>
+          <span class="status">Completed</span>
         </div>
       </article>
       <article class="item">
         <p class="period">2011 - 2012</p>
         <div>
-          <h3>Técnico em Redes de Computadores</h3>
-          <p>SENAI, Santos/SP. Formação técnica em infraestrutura, administração de redes e suporte a ambientes computacionais.</p>
-          <span class="status">Finalizada</span>
+          <h3>Technical Degree in Computer Networks</h3>
+          <p>SENAI, Santos/SP. Technical training in infrastructure, network administration, and support for computing environments.</p>
+          <span class="status">Completed</span>
         </div>
       </article>
     </div>
@@ -814,39 +814,39 @@
   <template id="template-experiencia">
     <div class="timeline">
       <article class="item">
-        <p class="period">07/2019 - atual</p>
+        <p class="period">07/2019 - present</p>
         <div>
-          <h3>Tutoria técnico-administrativa | Universidade Católica de Santos</h3>
-          <p>Atuação em rotinas acadêmicas de Educação a Distância, com suporte a estudantes e docentes, acompanhamento discente e organização de ambientes virtuais de aprendizagem.</p>
+          <h3>Technical and Administrative Tutor | Catholic University of Santos</h3>
+          <p>Work across e-learning academic routines, supporting students and faculty, monitoring student progress, and organizing virtual learning environments.</p>
           <ul>
-            <li>Mediação de fóruns, atividades online e canais de comunicação com estudantes.</li>
-            <li>Acompanhamento de progresso acadêmico, permanência e engajamento em disciplinas.</li>
-            <li>Organização de materiais de apoio, fluxos, orientações e modelos de comunicação.</li>
-            <li>Atendimento síncrono e assíncrono a estudantes, docentes e equipes internas.</li>
+            <li>Mediation of forums, online activities, and communication channels with students.</li>
+            <li>Monitoring of academic progress, retention, and engagement across courses.</li>
+            <li>Organization of support materials, workflows, guidelines, and communication templates.</li>
+            <li>Synchronous and asynchronous support for students, faculty, and internal teams.</li>
           </ul>
         </div>
       </article>
       <article class="item">
         <p class="period">10/2015 - 10/2017</p>
         <div>
-          <h3>Suporte ao estudante | Universidade Metropolitana de Santos</h3>
-          <p>Atendimento a estudantes de cursos EaD, com orientação acadêmica, suporte técnico e encaminhamento de demandas institucionais.</p>
+          <h3>Student Support | Metropolitan University of Santos</h3>
+          <p>Support for students enrolled in e-learning programs, including academic guidance, technical support, and routing of institutional requests.</p>
           <ul>
-            <li>Atendimento via e-mail institucional e telefone.</li>
-            <li>Direcionamento de demandas para setores responsáveis.</li>
-            <li>Configurações pontuais no Moodle para casos excepcionais.</li>
+            <li>Support via institutional email and phone.</li>
+            <li>Routing of requests to the responsible departments.</li>
+            <li>Specific Moodle settings for exceptional academic cases.</li>
           </ul>
         </div>
       </article>
       <article class="item">
         <p class="period">2013 - 2014</p>
         <div>
-          <h3>Educadora | Prepara Cursos</h3>
-          <p>Monitoria de ambiente de aprendizagem em cursos realizados em plataforma própria, com apoio à rotina acadêmica, aos materiais didáticos e à infraestrutura de laboratório.</p>
+          <h3>Educator | Prepara Cursos</h3>
+          <p>Monitoring of learning environments for courses delivered through a proprietary platform, supporting academic routines, learning materials, and lab infrastructure.</p>
           <ul>
-            <li>Acompanhamento da frequência acadêmica dos estudantes.</li>
-            <li>Correção de apostilas e verificação dos materiais utilizados nas aulas.</li>
-            <li>Manutenção do laboratório, dos softwares e dos ambientes de aula.</li>
+            <li>Monitoring of student attendance.</li>
+            <li>Review of workbooks and verification of classroom materials.</li>
+            <li>Maintenance of the lab, software, and classroom environments.</li>
           </ul>
         </div>
       </article>
@@ -856,30 +856,30 @@
   <template id="template-habilidades">
     <div class="skills">
       <article class="skill-group">
-        <h3>Pedagógicas</h3>
+        <h3>Pedagogical</h3>
         <ul>
-          <li>Mediação pedagógica em fóruns e atividades colaborativas.</li>
-          <li>Orientação acadêmica, feedback formativo e acompanhamento de aprendizagem.</li>
-          <li>Apoio à estruturação de materiais e percursos em ambientes virtuais.</li>
-          <li>Design instrucional, metodologias ativas e experiência do estudante.</li>
+          <li>Pedagogical mediation in forums and collaborative activities.</li>
+          <li>Academic guidance, formative feedback, and learning progress monitoring.</li>
+          <li>Support for structuring materials and learning paths in virtual environments.</li>
+          <li>Instructional design, active learning methodologies, and student experience.</li>
         </ul>
       </article>
       <article class="skill-group">
-        <h3>Tecnológicas</h3>
+        <h3>Technical</h3>
         <ul>
-          <li>Moodle: organização, configuração, suporte e boas práticas de uso.</li>
-          <li>HTML, CSS e JavaScript para componentes, protótipos e ferramentas simples.</li>
-          <li>GitHub Pages, versionamento e publicação de projetos web.</li>
-          <li>Google Workspace, videoconferência e H5P.</li>
+          <li>Moodle: organization, configuration, support, and usage best practices.</li>
+          <li>HTML, CSS, and JavaScript for components, prototypes, and lightweight tools.</li>
+          <li>GitHub Pages, version control, and web project publishing.</li>
+          <li>Google Workspace, videoconferencing, and H5P.</li>
         </ul>
       </article>
       <article class="skill-group">
-        <h3>Operacionais</h3>
+        <h3>Operational</h3>
         <ul>
-          <li>Padronização de fluxos, checklists, orientações e materiais de apoio.</li>
-          <li>Comunicação clara com estudantes, docentes e equipes internas.</li>
-          <li>Gestão de demandas, escalonamento e documentação de processos.</li>
-          <li>Visão sistêmica para reduzir ruído e retrabalho.</li>
+          <li>Standardization of workflows, checklists, guidelines, and support materials.</li>
+          <li>Clear communication with students, faculty, and internal teams.</li>
+          <li>Request management, escalation, and process documentation.</li>
+          <li>Systems-oriented view to reduce friction and rework.</li>
         </ul>
       </article>
     </div>
@@ -896,17 +896,17 @@
         </div>
         <div>
           <h3>eadtools</h3>
-          <p>Conjunto de ferramentas web para apoiar rotinas de Educação a Distância, com foco em organização, acompanhamento de pendências, clareza operacional e autonomia no trabalho acadêmico.</p>
+          <p>A set of web tools designed to support e-learning routines, with a focus on organization, task tracking, operational clarity, and autonomy in academic work.</p>
         </div>
         <div>
           <div class="cluster">
             <span class="pill">HTML</span>
             <span class="pill">CSS</span>
             <span class="pill">JavaScript</span>
-            <span class="pill">Rotinas Pedagógicas</span>
+            <span class="pill">Pedagogical routines</span>
           </div>
           <div class="cluster" style="margin-top:10px;">
-            <a class="button" href="https://eadtools.pages.dev/" target="_blank" rel="noopener" aria-label="Abrir projeto eadtools">
+            <a class="button" href="https://eadtools.pages.dev/" target="_blank" rel="noopener" aria-label="Open eadtools project">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M8 16 16 8" />
                 <path d="M10 8h6v6" />
@@ -918,21 +918,21 @@
       </article>
       <article class="project">
         <div class="project-visual">
-          <img src="assets/images/brazaesthetic-logo.png" alt="Identidade visual do projeto brazaesthetic">
+          <img src="assets/images/brazaesthetic-logo.png" alt="Visual identity for the brazaesthetic project">
         </div>
         <div>
           <h3>brazaesthetic</h3>
-          <p>Projeto autoral de pesquisa visual e curadoria dedicado à preservação do imaginário estético brasileiro, articulando cultura digital, memória, arquivo e leitura crítica de referências populares.</p>
+          <p>An independent visual research and curation project dedicated to preserving Brazilian aesthetic imaginaries, connecting digital culture, memory, archives, and critical readings of popular references.</p>
         </div>
         <div>
           <div class="cluster">
-            <span class="pill">Curadoria digital</span>
-            <span class="pill">Pesquisa visual</span>
-            <span class="pill">Memória cultural</span>
+            <span class="pill">Digital curation</span>
+            <span class="pill">Visual research</span>
+            <span class="pill">Cultural memory</span>
             <span class="pill">Web</span>
           </div>
           <div class="cluster" style="margin-top:10px;">
-            <a class="button" href="https://brazaesthetic.com/" target="_blank" rel="noopener" aria-label="Abrir projeto brazaesthetic">
+            <a class="button" href="https://brazaesthetic.com/" target="_blank" rel="noopener" aria-label="Open brazaesthetic project">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M8 16 16 8" />
                 <path d="M10 8h6v6" />
@@ -947,11 +947,12 @@
 
   <template id="template-contato">
     <p class="lead">
-      Aberta a conexões profissionais, projetos educacionais, colaboração em soluções
-      para ambientes virtuais e oportunidades que aproximem pedagogia, tecnologia e organização.
+      Open to professional connections, educational projects, collaboration on solutions
+      for virtual learning environments, and opportunities that connect pedagogy,
+      technology, and organization.
     </p>
-    <div class="social-icons" aria-label="Links de contato">
-      <a class="icon-link" href="mailto:thsmmrtns@gmail.com" aria-label="Enviar e-mail">
+    <div class="social-icons" aria-label="Contact links">
+      <a class="icon-link" href="mailto:thsmmrtns@gmail.com" aria-label="Send email">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm-.4 4.25-7.07 5.3a.9.9 0 0 1-1.06 0L4.4 8.25V6.6l7.6 5.7 7.6-5.7v1.65Z"/>
         </svg>
@@ -961,7 +962,7 @@
           <path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5ZM.28 8.1h4.43V23H.28V8.1Zm7.31 0h4.24v2.04h.06c.59-1.12 2.04-2.3 4.2-2.3 4.49 0 5.32 2.95 5.32 6.79V23h-4.42v-7.42c0-1.77-.03-4.04-2.46-4.04-2.47 0-2.85 1.93-2.85 3.91V23H7.59V8.1Z"/>
         </svg>
       </a>
-      <a class="icon-link" href="http://lattes.cnpq.br/6380147074198594" target="_blank" rel="noopener" aria-label="Currículo Lattes">
+      <a class="icon-link" href="http://lattes.cnpq.br/6380147074198594" target="_blank" rel="noopener" aria-label="Lattes CV">
         <svg viewBox="0 0 240 240" aria-hidden="true">
           <path fill-rule="evenodd" d="M13 140C1 95 13 60 49 38c36-23 87-26 153-4 11 4 10 11-2 12-44 1-78 5-101 17-25 12-35 33-29 59 8 31 35 48 78 50 36 2 64-12 85-42 4-6 10-3 10 5-1 32-18 61-52 85-31 21-72 37-124 47L12 147l112 20c-42 4-79-5-111-27Zm114 4c-33-8-55-29-50-51 5-22 34-33 67-25 34 8 57 31 52 53-5 22-36 31-69 23Z" />
         </svg>
@@ -988,12 +989,12 @@
     var contentTitle = document.getElementById("content-title");
     var contentBody = document.getElementById("content-body");
     var sectionLabels = {
-      sobre: "Sobre",
-      formacao: "Formação",
-      experiencia: "Experiência profissional",
-      habilidades: "Habilidades",
-      projetos: "Projetos",
-      contato: "Contato"
+      sobre: "About",
+      formacao: "Education",
+      experiencia: "Professional experience",
+      habilidades: "Skills",
+      projetos: "Projects",
+      contato: "Contact"
     };
 
     function openSection(section, shouldScroll) {
